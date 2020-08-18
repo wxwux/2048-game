@@ -15,6 +15,7 @@
       ]
     }],
     "no-mixed-operators": "off",
+    "no-plusplus": "off",
     "import/extensions": [1, "ignorePackages", {
       "ts": "never",
       "tsx": "never"

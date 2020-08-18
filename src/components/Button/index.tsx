@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Index = styled.button`
+const Button = styled.button`
   background-color: brown;
   border-radius: 5px;
   border: none;
@@ -14,4 +14,4 @@ const Index = styled.button`
   align-items: center;
 `;
 
-export default Index;
+export default Button;

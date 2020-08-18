@@ -5,7 +5,7 @@ type PropTypes = {
   children: ReactNode
 }
 
-const ControllPanel: FC<PropTypes> = ({ children }: PropTypes) => <Container>{children}</Container>;
+const ControlPanel: FC<PropTypes> = ({ children }: PropTypes) => <Container>{children}</Container>;
 
 const Container = styled.div`
   display: flex;
@@ -16,4 +16,4 @@ const Container = styled.div`
   align-items: center;
 `;
 
-export default ControllPanel;
+export default ControlPanel;
