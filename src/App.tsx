@@ -7,15 +7,8 @@ import Field from './components/Field';
 
 const initCells : GameCell[] = createStartCells();
 
-function one ()  {
-  console.log('go');
-};
-
 const App: FC = () => {
-  const [cells, setCells] = useState<GameCell[]>([]);
-
-  const onoo = one();
-
+  const [cells, setCells] = useState<GameCell[]>(initCells);
   const [str, setSts] = useState();
 
 

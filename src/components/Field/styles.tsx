@@ -42,7 +42,7 @@ export const BackgroundCell = styled.div`
 `;
 
 export const Cell = styled(BackgroundCell)<CellProps>`
-  transform: translate(${(props) => props.y * 110}px, ${(props) => props.y * 110}px);
+  transform: translate(${(props) => props.x * 110}px, ${(props) => props.y * 110}px);
   text-align: center;
   line-height: 100px;
   background-color: ${({ value }) => calculateBackgroundColor(value)};
