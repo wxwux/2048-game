@@ -24,7 +24,7 @@ const Field : FC<PropTypes> = ({ cells }: PropTypes) => (
         x, y, value, id,
       }: GameCell) => (
         <Cell key={id} x={x} y={y} value={value}>
-          {value}
+          {id}
         </Cell>
       ))}
     </Playground>

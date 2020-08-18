@@ -1,16 +1,23 @@
 import React, { FC, useState } from 'react';
 import { GameCell } from './types';
+import { createStartCells } from './core/init';
 
 import Layout from './components/Layout';
 import Field from './components/Field';
 
+const initCells : GameCell[] = createStartCells();
+
+function one ()  {
+  console.log('go');
+};
+
 const App: FC = () => {
-  const [cells, setCells] = useState<GameCell[]>([{
-    id: 1,
-    x: 1,
-    y: 1,
-    value: 4,
-  }]);
+  const [cells, setCells] = useState<GameCell[]>([]);
+
+  const onoo = one();
+
+  const [str, setSts] = useState();
+
 
   return (
     <Layout>
