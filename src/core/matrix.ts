@@ -1,7 +1,7 @@
-export const copyMatrix = <T>(matrix: T[][]) : T[][] => matrix.map((row: T[]) => row.slice());
+import { cloneDeep } from 'lodash';
 
 export const transpose = <T>(matrix: T[][]): T[][] => {
-  const clonedMatrix: T[][] = copyMatrix(matrix);
+  const clonedMatrix: T[][] = cloneDeep<T[][]>(matrix);
   const n: number = clonedMatrix[0].length;
 
   for (let i = 0, j = 0; i < n; i++) {
@@ -20,7 +20,7 @@ export const transpose = <T>(matrix: T[][]): T[][] => {
 };
 
 export const reverseRows = <T>(matrix: T[][]): T[][] => {
-  const clonedMatrix: T[][] = copyMatrix(matrix);
+  const clonedMatrix: T[][] = cloneDeep<T[][]>(matrix);
   const n: number = clonedMatrix[0].length;
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {

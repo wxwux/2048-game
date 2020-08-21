@@ -10,5 +10,6 @@ export type GameCell = {
   x: number;
   y: number;
   value: number;
-  state? : CellType
+  state? : CellType;
+  by?: GameCell | null;
 }

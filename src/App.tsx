@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { GameCell } from './types';
 import { createStartCells } from './core/initer';
+import { moveCells, Direction } from './core/engine';
 
 import Layout from './components/Layout';
 import Field from './components/Field';
@@ -20,7 +21,7 @@ const App: FC = () => {
   };
 
   const handleKeyPress = (event: KeyboardEvent): void => {
-    console.log('asda');
+    moveCells(cells, Direction.UP);
   };
 
   useEffect(() => {
