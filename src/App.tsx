@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { GameCell } from './types';
 import { createStartCells } from './core/initer';
 import { moveCells, Direction } from './core/engine';
+import { removeAndIncreaseCells } from './core/updater';
 
 import Layout from './components/Layout';
 import Field from './components/Field';
@@ -34,7 +35,7 @@ const App: FC = () => {
       // const [movedCells] = moveCells(cells, mappedKeysToDirections[event.code]);
       const movedCells = moveCells(cells, mappedKeysToDirections[event.code]);
 
-      setCells(movedCells);
+      setCells(removeAndIncreaseCells(movedCells));
       // console.log(movedCells);
     }
   };
