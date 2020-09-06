@@ -12,4 +12,3 @@ export const removeAndIncreaseCells = (cells: GameCell[]): GameCell[] => cells
 
     return processedCell;
   });
-
