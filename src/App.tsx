@@ -11,6 +11,15 @@ import Score from './components/Score';
 
 const initCells : GameCell[] = createStartCells();
 
+const mappedKeysToDirections: {
+  [key: string]: Direction
+} = {
+  ArrowUp: Direction.UP,
+  ArrowRight: Direction.RIGHT,
+  ArrowDown: Direction.DOWN,
+  ArrowLeft: Direction.LEFT,
+};
+
 const App: FC = () => {
   const [cells, setCells] = useState<GameCell[]>(initCells);
   const [scores, setScores] = useState<number>(0);
@@ -21,7 +30,13 @@ const App: FC = () => {
   };
 
   const handleKeyPress = (event: KeyboardEvent): void => {
-    moveCells(cells, Direction.UP);
+    if (Object.keys(mappedKeysToDirections).includes(event.code)) {
+      // const [movedCells] = moveCells(cells, mappedKeysToDirections[event.code]);
+      const movedCells = moveCells(cells, mappedKeysToDirections[event.code]);
+
+      setCells(movedCells);
+      // console.log(movedCells);
+    }
   };
 
   useEffect(() => {

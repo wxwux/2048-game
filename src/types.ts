@@ -1,8 +1,8 @@
 export enum CellType {
-  IDLE,
-  MOVING,
-  DYING,
-  INCREASE
+  IDLE = 'IDLE',
+  MOVING = 'MOVING',
+  DYING = 'DYING',
+  INCREASE = 'INCREASE'
 }
 
 export type GameCell = {

@@ -3,11 +3,13 @@ import { CellType, GameCell } from '../types';
 import rotateMatrix from './matrix';
 
 export enum Direction {
-  UP,
-  DOWN,
-  LEFT,
-  RIGHT,
+  UP = 'UP',
+  DOWN = 'DOWN',
+  LEFT = 'LEFT',
+  RIGHT = 'RIGHT',
 }
+
+type MoveCellsFunction = <T extends (GameCell | number) >(matrix: T[][], x: number, y: number) => T[][];
 
 export const rotateMatrixToDirection = <T>(matrix: T[][], direction: Direction): T[][] => {
   switch (direction) {
@@ -35,10 +37,10 @@ export const rotateMatrixFromDirection = <T>(matrix: T[][], direction: Direction
   }
 };
 
-export const moveCell = <T extends (GameCell | number)>(matrixToTransform: T[][], x: number, y: number): T[][] => {
+export const moveCell: MoveCellsFunction = (matrixToTransform, x, y) => {
   let currentRow: number = y;
   let prevRow: number = y - 1;
-  const matrix = cloneDeep(matrixToTransform) as T[][];
+  const matrix = cloneDeep(matrixToTransform);
 
   while (prevRow >= 0) {
     if (matrix[prevRow][x] === 0) {
@@ -49,7 +51,7 @@ export const moveCell = <T extends (GameCell | number)>(matrixToTransform: T[][]
     } else if (
       (matrix[prevRow][x] as GameCell).value === (matrix[currentRow][x] as GameCell).value
       && ((matrix[prevRow][x] as GameCell).state === CellType.IDLE
-      || (matrix[prevRow][x] as GameCell).state === CellType.MOVING)
+        || (matrix[prevRow][x] as GameCell).state === CellType.MOVING)
     ) {
       (matrix[prevRow][x] as GameCell).state = CellType.DYING;
 
@@ -71,9 +73,7 @@ export const moveCell = <T extends (GameCell | number)>(matrixToTransform: T[][]
   return matrix;
 };
 
-type MoveCellFunction = <T extends (GameCell | number)>(matrix: T[][], x: number, y: number) => T[][];
-
-export const traverseMatrix = <T extends (GameCell | number)>(matrixToTraverse: T[][], cb: MoveCellFunction): T[][] => {
+export const traverseMatrix = <T extends (GameCell | number)>(matrixToTraverse: T[][], cb: MoveCellsFunction): T[][] => {
   let matrix = cloneDeep(matrixToTraverse);
 
   for (let y = 0; y < 4; y++) {
@@ -87,40 +87,30 @@ export const traverseMatrix = <T extends (GameCell | number)>(matrixToTraverse: 
   return matrix;
 };
 
-export const swapCells = <T extends (GameCell | number)>(cellsToSwap: T[][], x: number, y: number): T[][] => {
-  const matrix = cloneDeep(cellsToSwap) as T[][];
+export const swapCells: MoveCellsFunction = (cellsToSwap, x, y) => {
+  const matrix = cloneDeep(cellsToSwap);
   (matrix[y][x] as GameCell).y = y;
   (matrix[y][x] as GameCell).x = x;
 
   return matrix;
 };
 
-export const moveCells = (cellsToMove: GameCell[], direction: Direction): [GameCell[], (number| GameCell)[][]] => {
+export const moveCells = (cellsToMove: GameCell[], direction: Direction): GameCell[] => {
   const cells: GameCell[] = cloneDeep<GameCell[]>(cellsToMove);
   const matrixSize = 4;
 
-  const matrix: (GameCell | number)[][] = Array.from(
+  const emptyMatrix: (GameCell | number)[][] = Array.from(
     new Array(matrixSize), () => Array.from(new Array(matrixSize), () => 0),
   );
 
   cells.forEach((cell: GameCell) => {
-    matrix[cell.y][cell.x] = cell;
+    emptyMatrix[cell.y][cell.x] = cell;
   });
 
-  const rotatedMatrix = rotateMatrixFromDirection<GameCell | number>(matrix, direction);
+  const rotatedMatrix = rotateMatrixFromDirection<GameCell | number>(emptyMatrix, direction);
   const transformedMatrix = traverseMatrix(rotatedMatrix, moveCell);
   const rotatedBackMatrix = rotateMatrixToDirection<GameCell | number>(transformedMatrix, direction);
   const finalMatrix = traverseMatrix(rotatedBackMatrix, swapCells);
 
-  const movedCells = cells
-    .filter((cell) => cell.by !== null)
-    .map((cellToChange) => {
-      const cell: GameCell = cellToChange;
-      cell.x = cell.by!.x;
-      cell.y = cell.by!.y;
-      delete cell.by;
-      return cell;
-    });
-
-  return [movedCells, finalMatrix];
+  return finalMatrix.flat(2).filter((cell: (GameCell | 0)) => cell !== 0);
 };
