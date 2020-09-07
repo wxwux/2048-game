@@ -1,6 +1,7 @@
 import { cloneDeep } from 'lodash';
 import { CellType, GameCell } from '../types';
 import rotateMatrix from './matrix';
+import { MATRIX_SIZE } from './creator';
 
 export enum Direction {
   UP = 'UP',
@@ -76,8 +77,8 @@ export const moveCell: MoveCellsFunction = (matrixToTransform, x, y) => {
 export const traverseMatrix = <T extends (GameCell | number)>(matrixToTraverse: T[][], cb: MoveCellsFunction): T[][] => {
   let matrix = cloneDeep(matrixToTraverse);
 
-  for (let y = 0; y < 4; y++) {
-    for (let x = 0; x < 4; x++) {
+  for (let y = 0; y < MATRIX_SIZE; y++) {
+    for (let x = 0; x < MATRIX_SIZE; x++) {
       if (matrix[y][x] !== 0) {
         matrix = cb(matrix, x, y);
       }
@@ -97,10 +98,9 @@ export const swapCells: MoveCellsFunction = (cellsToSwap, x, y) => {
 
 export const moveCells = (cellsToMove: GameCell[], direction: Direction): GameCell[] => {
   const cells: GameCell[] = cloneDeep<GameCell[]>(cellsToMove);
-  const matrixSize = 4;
 
   const emptyMatrix: (GameCell | number)[][] = Array.from(
-    new Array(matrixSize), () => Array.from(new Array(matrixSize), () => 0),
+    new Array(MATRIX_SIZE), () => Array.from(new Array(MATRIX_SIZE), () => 0),
   );
 
   cells.forEach((cell: GameCell) => {

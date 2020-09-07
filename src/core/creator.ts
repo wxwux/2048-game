@@ -1,4 +1,4 @@
-import { uniqueId } from 'lodash';
+import { uniqueId, cloneDeep } from 'lodash';
 import { CellType, GameCell } from '../types';
 
 export const create = (cell: GameCell): GameCell => ({
@@ -10,7 +10,10 @@ export const create = (cell: GameCell): GameCell => ({
   by: null,
 });
 
+export const MATRIX_SIZE = 4;
+
 export const getRandomCoords = () : number => Math.floor(Math.random() * 3.9);
+export const generateCheckSum = (x: number, y: number) => x * MATRIX_SIZE + y;
 
 export const createInitialCells = () : GameCell[] => {
   const firstCell: GameCell = create({ x: getRandomCoords(), y: getRandomCoords(), value: 2 });
@@ -23,30 +26,36 @@ export const createInitialCells = () : GameCell[] => {
   return [firstCell, secondCell];
 };
 
-export const populateFieldWithNewCells = (cells: GameCell[]): GameCell[] => {
-  const occupiedCoords = new Set();
-
-  cells.forEach((cell) => {
-    occupiedCoords.add(cell.x * 4 + cell.y);
-  });
-
-  // const allCellsAreFilled = occupiedCoords.size === 16;
-
+export const getAvailableCoords = (occupiedCoords: Set<number>): [number, number] => {
+  const takenCoords = cloneDeep<Set<number>>(occupiedCoords);
+  const prevSetSize = takenCoords.size;
   let x = 0;
   let y = 0;
-
-  const startSize = occupiedCoords.size;
 
   do {
     x = getRandomCoords();
     y = getRandomCoords();
 
-    const sum = x * 4 + y;
-    occupiedCoords.add(sum);
-  } while (startSize === occupiedCoords.size);
+    takenCoords.add(generateCheckSum(x, y));
+  } while (prevSetSize === takenCoords.size);
 
-  return [...cells, create({ x, y, value: 2 })];
+  return [x, y];
+};
+
+export const populateFieldWithNewCells = (cells: GameCell[]): GameCell[] => {
+  const occupiedCoords = new Set<number>();
+
+  cells.forEach((cell) => {
+    occupiedCoords.add(generateCheckSum(cell.x, cell.y));
+  });
+
+  // const allCellsAreFilled = occupiedCoords.size === 16;
 
   // if (!allCellsAreFilled) {
   // }
+
+  const [x, y] = getAvailableCoords(occupiedCoords);
+  occupiedCoords.add(generateCheckSum(x, y));
+
+  return [...cells, create({ x, y, value: 2 })];
 };
