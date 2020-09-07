@@ -13,3 +13,8 @@ export type GameCell = {
   state? : CellType;
   by?: GameCell | null;
 }
+
+export type MatrixCell = GameCell | 0;
+
+export type MoveCellsFunction =
+    <T extends MatrixCell >(matrix: T[][], x: number, y: number) => T[][];

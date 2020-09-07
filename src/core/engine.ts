@@ -1,5 +1,7 @@
 import { cloneDeep } from 'lodash';
-import { CellType, GameCell } from '../types';
+import {
+  CellType, GameCell, MoveCellsFunction, MatrixCell,
+} from '../types';
 import rotateMatrix from './matrix';
 import { MATRIX_SIZE } from './creator';
 
@@ -9,8 +11,6 @@ export enum Direction {
   LEFT = 'LEFT',
   RIGHT = 'RIGHT',
 }
-
-type MoveCellsFunction = <T extends (GameCell | number) >(matrix: T[][], x: number, y: number) => T[][];
 
 export const rotateMatrixToDirection = <T>(matrix: T[][], direction: Direction): T[][] => {
   switch (direction) {
@@ -39,8 +39,8 @@ export const rotateMatrixFromDirection = <T>(matrix: T[][], direction: Direction
 };
 
 export const moveCell: MoveCellsFunction = (matrixToTransform, x, y) => {
-  let currentRow: number = y;
-  let prevRow: number = y - 1;
+  let currentRow = y;
+  let prevRow = y - 1;
   const matrix = cloneDeep(matrixToTransform);
 
   while (prevRow >= 0) {
@@ -74,7 +74,9 @@ export const moveCell: MoveCellsFunction = (matrixToTransform, x, y) => {
   return matrix;
 };
 
-export const traverseMatrix = <T extends (GameCell | number)>(matrixToTraverse: T[][], cb: MoveCellsFunction): T[][] => {
+export const traverseMatrix = <T extends MatrixCell>(
+  matrixToTraverse: T[][], cb: MoveCellsFunction,
+): T[][] => {
   let matrix = cloneDeep(matrixToTraverse);
 
   for (let y = 0; y < MATRIX_SIZE; y++) {
@@ -96,21 +98,22 @@ export const swapCells: MoveCellsFunction = (cellsToSwap, x, y) => {
   return matrix;
 };
 
+export const createEmptyMatrix = (matrixSize: number): MatrixCell[][] => Array.from(
+  new Array(matrixSize), () => Array.from(new Array(matrixSize), () => 0),
+);
+
 export const moveCells = (cellsToMove: GameCell[], direction: Direction): GameCell[] => {
   const cells: GameCell[] = cloneDeep<GameCell[]>(cellsToMove);
-
-  const emptyMatrix: (GameCell | number)[][] = Array.from(
-    new Array(MATRIX_SIZE), () => Array.from(new Array(MATRIX_SIZE), () => 0),
-  );
+  const emptyMatrix = createEmptyMatrix(MATRIX_SIZE);
 
   cells.forEach((cell: GameCell) => {
     emptyMatrix[cell.y][cell.x] = cell;
   });
 
-  const rotatedMatrix = rotateMatrixFromDirection<GameCell | number>(emptyMatrix, direction);
+  const rotatedMatrix = rotateMatrixFromDirection<MatrixCell>(emptyMatrix, direction);
   const transformedMatrix = traverseMatrix(rotatedMatrix, moveCell);
-  const rotatedBackMatrix = rotateMatrixToDirection<GameCell | number>(transformedMatrix, direction);
+  const rotatedBackMatrix = rotateMatrixToDirection<MatrixCell>(transformedMatrix, direction);
   const finalMatrix = traverseMatrix(rotatedBackMatrix, swapCells);
 
-  return finalMatrix.flat(2).filter((cell: (GameCell | 0)) => cell !== 0);
+  return finalMatrix.flat(2).filter((cell: MatrixCell) => cell !== 0);
 };
