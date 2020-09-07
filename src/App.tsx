@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { GameCell } from './types';
-import { createStartCells } from './core/initer';
+import { createInitialCells, populateFieldWithNewCells } from './core/creator';
 import { moveCells, Direction } from './core/engine';
 import { removeAndIncreaseCells } from './core/updater';
 
@@ -10,7 +10,7 @@ import ControlPanel from './components/ControlPanel';
 import Button from './components/Button';
 import Score from './components/Score';
 
-const initCells : GameCell[] = createStartCells();
+const initCells : GameCell[] = createInitialCells();
 
 const mappedKeysToDirections: {
   [key: string]: Direction
@@ -26,17 +26,18 @@ const App: FC = () => {
   const [scores, setScores] = useState<number>(0);
 
   const runNewGame = (): void => {
-    setCells(createStartCells());
+    setCells(createInitialCells());
     setScores(0);
   };
 
   const handleKeyPress = (event: KeyboardEvent): void => {
     if (Object.keys(mappedKeysToDirections).includes(event.code)) {
-      // const [movedCells] = moveCells(cells, mappedKeysToDirections[event.code]);
       const movedCells = moveCells(cells, mappedKeysToDirections[event.code]);
 
-      setCells(removeAndIncreaseCells(movedCells));
-      // console.log(movedCells);
+      // setCells(removeAndIncreaseCells(movedCells));
+      // setCells(populateFieldWithNewCells(cells));
+
+      setCells(populateFieldWithNewCells(removeAndIncreaseCells(movedCells)));
     }
   };
 
