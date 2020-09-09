@@ -1,14 +1,9 @@
 import { cloneDeep } from 'lodash';
 import {
-  CellType, GameCell, MoveCellsFunction, MatrixCell, CellCoords, Direction,
+  CellCoords, CellType, Direction, GameCell, MatrixCell, MoveCellsFunction,
 } from '../types';
-
-import {
-  rotateMatrixToDirection, rotateMatrixFromDirection, traverseMatrix,
-} from './matrix';
-
+import { rotateMatrixFromDirection, rotateMatrixToDirection, traverseMatrix } from './matrix';
 import { createEmptyMatrix } from './creator';
-
 import { MATRIX_SIZE } from './constants';
 
 export const cellIsEmpty = (cell: MatrixCell): boolean => cell === 0;
@@ -22,7 +17,8 @@ export const cellsValuesAreSame = (
 
 export const cellIsInIdleState = (
   cell: MatrixCell,
-): boolean => (cell as GameCell).state === CellType.IDLE;
+): boolean => (cell as GameCell).state === CellType.IDLE
+  || (cell as GameCell).state === CellType.BORN;
 
 export const cellIsInMovingState = (
   cell: MatrixCell,
@@ -55,9 +51,9 @@ export const suppressCellUpInMatrix = <T extends MatrixCell>(
     (matrix[prevRow.y][prevRow.x] as GameCell).by = matrix[currentRow.y][currentRow.x] as GameCell;
   }
 
-  (matrix[currentRow.y][currentRow.x] as GameCell).state = CellType.INCREASE;
-  matrix[prevRow.y][prevRow.x] = matrix[currentRow.y][currentRow.x];
-  (matrix[currentRow.y][currentRow.x] as number) = 0;
+  (matrix[prevRow.y][prevRow.x] as GameCell).state = CellType.INCREASE;
+  // matrix[prevRow.y][prevRow.x] = matrix[currentRow.y][currentRow.x];
+  // (matrix[currentRow.y][currentRow.x] as number) = 0;
 
   return matrix;
 };
@@ -92,6 +88,8 @@ export const moveCells: MoveCellsFunction = (
         matrix, { x, y: currentRowY }, { x, y: prevRowY },
       );
 
+      // TODO: поправить баг со сложением 3ёх клеток
+
       currentRowY = prevRowY;
     } else {
       break;
@@ -103,7 +101,7 @@ export const moveCells: MoveCellsFunction = (
   return matrix;
 };
 
-export const swapCells: MoveCellsFunction = (
+export const updateCellsCoords: MoveCellsFunction = (
   cellsToSwap, x, y,
 ) => {
   if (cellsToSwap[y][x] === 0) return cellsToSwap;
@@ -128,7 +126,9 @@ export const getNewCellsPosition = (
   const rotatedMatrix = rotateMatrixFromDirection<MatrixCell>(emptyMatrix, direction);
   const transformedMatrix = traverseMatrix<MatrixCell>(rotatedMatrix, moveCells);
   const rotatedBackMatrix = rotateMatrixToDirection<MatrixCell>(transformedMatrix, direction);
-  const finalMatrix = traverseMatrix(rotatedBackMatrix, swapCells);
+  const finalMatrix = traverseMatrix(rotatedBackMatrix, updateCellsCoords);
+
+  console.log(finalMatrix);
 
   return finalMatrix.flat(2).filter((cell: MatrixCell) => cell !== 0);
 };

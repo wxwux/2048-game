@@ -1,4 +1,4 @@
-import { uniqueId, cloneDeep } from 'lodash';
+import { cloneDeep, uniqueId } from 'lodash';
 import { CellType, GameCell, MatrixCell } from '../types';
 import { MATRIX_SIZE } from './constants';
 
@@ -7,7 +7,7 @@ export const create = (cell: GameCell): GameCell => ({
   y: cell.y,
   id: cell.id ? cell.id : uniqueId(),
   value: cell.value,
-  state: CellType.IDLE,
+  state: cell.state,
   by: null,
 });
 
@@ -15,12 +15,20 @@ export const getRandomCoords = () : number => Math.floor(Math.random() * 3.9);
 export const generateCheckSum = (x: number, y: number) => x * MATRIX_SIZE + y;
 
 export const createInitialCells = () : GameCell[] => {
-  const firstCell: GameCell = create({ x: getRandomCoords(), y: getRandomCoords(), value: 2 });
-  const secondCell: GameCell = create({ x: getRandomCoords(), y: getRandomCoords(), value: 2 });
+  const firstCell: GameCell = create({
+    x: getRandomCoords(), y: getRandomCoords(), value: 2, state: CellType.IDLE,
+  });
+  const secondCell: GameCell = create(
+    {
+      x: getRandomCoords(), y: getRandomCoords(), value: 2, state: CellType.IDLE,
+    },
+  );
 
   if (firstCell.x === secondCell.x && firstCell.y === secondCell.y) {
     firstCell.x = firstCell.x === 0 ? 1 : firstCell.x - 1;
   }
+
+  console.log(firstCell, secondCell);
 
   return [firstCell, secondCell];
 };
@@ -60,5 +68,7 @@ export const populateFieldWithNewCells = (cells: GameCell[]): GameCell[] => {
   const [x, y] = getAvailableCoords(occupiedCoords);
   occupiedCoords.add(generateCheckSum(x, y));
 
-  return [...cells, create({ x, y, value: 2 })];
+  return [...cells, create({
+    x, y, value: 2, state: CellType.BORN,
+  })];
 };

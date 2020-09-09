@@ -21,9 +21,9 @@ const Field : FC<PropTypes> = ({ cells }: PropTypes) => (
 
     <Playground>
       {cells.map(({
-        x, y, value, id,
+        x, y, value, id, state,
       }: GameCell) => (
-        <Cell key={id} x={x} y={y} value={value}>
+        <Cell key={id} x={x} y={y} value={value} state={state}>
           {value}
         </Cell>
       ))}
