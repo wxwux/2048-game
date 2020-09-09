@@ -18,14 +18,13 @@ export const traverseMatrix = <T extends MatrixCell>(
 
 export const reverseRows = <T>(matrix: T[][]): T[][] => {
   const clonedMatrix: T[][] = cloneDeep<T[][]>(matrix);
-  const n: number = clonedMatrix[0].length;
 
-  for (let i = 0; i < n; i++) {
-    for (let j = 0; j < n; j++) {
-      if (j % 2 === 0) {
-        const temp: T = clonedMatrix[i][n - j - 1];
-        clonedMatrix[i][n - j - 1] = clonedMatrix[i][j];
-        clonedMatrix[i][j] = temp;
+  for (let y = 0; y < MATRIX_SIZE; y++) {
+    for (let x = 0; x < MATRIX_SIZE; x++) {
+      if (x % 2 === 0) {
+        const temp: T = clonedMatrix[y][MATRIX_SIZE - x - 1];
+        clonedMatrix[y][MATRIX_SIZE - x - 1] = clonedMatrix[y][x];
+        clonedMatrix[y][x] = temp;
       }
     }
   }
@@ -35,17 +34,16 @@ export const reverseRows = <T>(matrix: T[][]): T[][] => {
 
 export const transpose = <T>(matrix: T[][]): T[][] => {
   const clonedMatrix: T[][] = cloneDeep<T[][]>(matrix);
-  const n: number = clonedMatrix[0].length;
 
-  for (let i = 0, j = 0; i < n; i++) {
-    j = i;
-    while (j < n) {
-      if (i !== j) {
-        const temp: T = clonedMatrix[i][j];
-        clonedMatrix[i][j] = clonedMatrix[j][i];
-        clonedMatrix[j][i] = temp;
+  for (let y = 0, x = 0; y < MATRIX_SIZE; y++) {
+    x = y;
+    while (x < MATRIX_SIZE) {
+      if (y !== x) {
+        const temp: T = clonedMatrix[y][x];
+        clonedMatrix[y][x] = clonedMatrix[x][y];
+        clonedMatrix[x][y] = temp;
       }
-      j++;
+      x++;
     }
   }
 
