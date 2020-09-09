@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
-import { GameCell } from './types';
+import { GameCell, Direction } from './types';
 import { createInitialCells, populateFieldWithNewCells } from './core/creator';
-import { moveCells, Direction } from './core/engine';
+import { getNewCellsPosition } from './core/engine';
 import { removeAndIncreaseCells } from './core/updater';
 
 import Layout from './components/Layout';
@@ -32,7 +32,7 @@ const App: FC = () => {
 
   const handleKeyPress = (event: KeyboardEvent): void => {
     if (Object.keys(mappedKeysToDirections).includes(event.code)) {
-      const movedCells = moveCells(cells, mappedKeysToDirections[event.code]);
+      const movedCells = getNewCellsPosition(cells, mappedKeysToDirections[event.code]);
 
       // setCells(removeAndIncreaseCells(movedCells));
       // setCells(populateFieldWithNewCells(cells));

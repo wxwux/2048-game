@@ -1,3 +1,10 @@
+export enum Direction {
+  UP = 'UP',
+  DOWN = 'DOWN',
+  LEFT = 'LEFT',
+  RIGHT = 'RIGHT',
+}
+
 export enum CellType {
   IDLE = 'IDLE',
   MOVING = 'MOVING',
@@ -16,5 +23,13 @@ export type GameCell = {
 
 export type MatrixCell = GameCell | 0;
 
+export type CellCoords = {
+  x: number;
+  y: number;
+}
+
+
 export type MoveCellsFunction =
-    <T extends MatrixCell >(matrix: T[][], x: number, y: number) => T[][];
+    <T extends MatrixCell >(matrixToTransform: T[][], x: number, y: number) => T[][];
+
+

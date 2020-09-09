@@ -1,5 +1,6 @@
 import { uniqueId, cloneDeep } from 'lodash';
-import { CellType, GameCell } from '../types';
+import { CellType, GameCell, MatrixCell } from '../types';
+import { MATRIX_SIZE } from './constants';
 
 export const create = (cell: GameCell): GameCell => ({
   x: cell.x,
@@ -9,8 +10,6 @@ export const create = (cell: GameCell): GameCell => ({
   state: CellType.IDLE,
   by: null,
 });
-
-export const MATRIX_SIZE = 4;
 
 export const getRandomCoords = () : number => Math.floor(Math.random() * 3.9);
 export const generateCheckSum = (x: number, y: number) => x * MATRIX_SIZE + y;
@@ -25,6 +24,10 @@ export const createInitialCells = () : GameCell[] => {
 
   return [firstCell, secondCell];
 };
+
+export const createEmptyMatrix = (matrixSize: number): MatrixCell[][] => Array.from(
+  new Array(matrixSize), () => Array.from(new Array(matrixSize), () => 0),
+);
 
 export const getAvailableCoords = (occupiedCoords: Set<number>): [number, number] => {
   const takenCoords = cloneDeep<Set<number>>(occupiedCoords);
