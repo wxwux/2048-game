@@ -26,14 +26,14 @@ export const cellIsInMovingState = (
 
 export const substituteCellUpInMatrix = <T extends MatrixCell>(
   originalMatrix: T[][],
-  currentRow: CellCoords,
-  prevRow: CellCoords,
+  currentCell: CellCoords,
+  substitutedCell: CellCoords,
 ): T[][] => {
   const matrix = cloneDeep(originalMatrix);
 
-  matrix[prevRow.y][prevRow.x] = matrix[currentRow.y][currentRow.x];
-  (matrix[currentRow.y][currentRow.x] as GameCell).state = CellType.MOVING;
-  (matrix[currentRow.y][currentRow.x] as 0) = 0;
+  matrix[substitutedCell.y][substitutedCell.x] = matrix[currentCell.y][currentCell.x];
+  (matrix[currentCell.y][currentCell.x] as GameCell).state = CellType.MOVING;
+  (matrix[currentCell.y][currentCell.x] as 0) = 0;
 
   return matrix;
 };
