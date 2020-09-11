@@ -9,7 +9,9 @@ export const traverseMatrix = <T extends MatrixCell>(
 
   for (let y = 0; y < MATRIX_SIZE; y++) {
     for (let x = 0; x < MATRIX_SIZE; x++) {
-      matrix = cb(matrix, x, y);
+      if (matrix[y][x] !== 0) {
+        matrix = cb(matrix, x, y);
+      }
     }
   }
 

@@ -28,8 +28,6 @@ export const createInitialCells = () : GameCell[] => {
     firstCell.x = firstCell.x === 0 ? 1 : firstCell.x - 1;
   }
 
-  console.log(firstCell, secondCell);
-
   return [firstCell, secondCell];
 };
 

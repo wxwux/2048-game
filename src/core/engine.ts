@@ -31,8 +31,8 @@ export const substituteCellUpInMatrix = <T extends MatrixCell>(
 ): T[][] => {
   const matrix = cloneDeep(originalMatrix);
 
-  (matrix[currentRow.y][currentRow.x] as GameCell).state = CellType.MOVING;
   matrix[prevRow.y][prevRow.x] = matrix[currentRow.y][currentRow.x];
+  (matrix[currentRow.y][currentRow.x] as GameCell).state = CellType.MOVING;
   (matrix[currentRow.y][currentRow.x] as 0) = 0;
 
   return matrix;
@@ -40,20 +40,20 @@ export const substituteCellUpInMatrix = <T extends MatrixCell>(
 
 export const suppressCellUpInMatrix = <T extends MatrixCell>(
   originalMatrix: T[][],
-  currentRow: CellCoords,
-  prevRow: CellCoords,
+  currentCell: CellCoords,
+  suppressedCell: CellCoords,
 ): T[][] => {
   const matrix = cloneDeep(originalMatrix);
 
-  (matrix[currentRow.y][currentRow.x] as GameCell).state = CellType.DYING;
+  (matrix[suppressedCell.y][suppressedCell.x] as GameCell).state = CellType.DYING;
+  (matrix[currentCell.y][currentCell.x] as GameCell).state = CellType.INCREASE;
 
-  if ('by' in (matrix[currentRow.y][currentRow.x] as GameCell)) {
-    (matrix[prevRow.y][prevRow.x] as GameCell).by = matrix[currentRow.y][currentRow.x] as GameCell;
-  }
+  // if ('by' in (matrix[suppressedCell.y][suppressedCell.x] as GameCell)) {
+  //   (matrix[suppressedCell.y][suppressedCell.x] as GameCell).by = matrix[currentCell.y][currentCell.x] as GameCell;
+  // }
 
-  (matrix[prevRow.y][prevRow.x] as GameCell).state = CellType.INCREASE;
-  // matrix[prevRow.y][prevRow.x] = matrix[currentRow.y][currentRow.x];
-  // (matrix[currentRow.y][currentRow.x] as number) = 0;
+  matrix[suppressedCell.y][suppressedCell.x] = matrix[currentCell.y][currentCell.x];
+  (matrix[currentCell.y][currentCell.x] as number) = 0;
 
   return matrix;
 };
@@ -87,8 +87,6 @@ export const moveCells: MoveCellsFunction = (
       matrix = suppressCellUpInMatrix(
         matrix, { x, y: currentRowY }, { x, y: prevRowY },
       );
-
-      // TODO: поправить баг со сложением 3ёх клеток
 
       currentRowY = prevRowY;
     } else {
@@ -127,8 +125,6 @@ export const getNewCellsPosition = (
   const transformedMatrix = traverseMatrix<MatrixCell>(rotatedMatrix, moveCells);
   const rotatedBackMatrix = rotateMatrixToDirection<MatrixCell>(transformedMatrix, direction);
   const finalMatrix = traverseMatrix(rotatedBackMatrix, updateCellsCoords);
-
-  console.log(finalMatrix);
 
   return finalMatrix.flat(2).filter((cell: MatrixCell) => cell !== 0);
 };

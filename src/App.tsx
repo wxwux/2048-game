@@ -34,7 +34,9 @@ const App: FC = () => {
     if (Object.keys(mappedKeysToDirections).includes(event.code)) {
       const movedCells = getNewCellsPosition(cells, mappedKeysToDirections[event.code]);
 
-      console.log(movedCells);
+      // console.log(movedCells);
+
+      // setCells(movedCells);
 
       // setCells(removeAndIncreaseCells(movedCells));
       // setCells(populateFieldWithNewCells(cells));
