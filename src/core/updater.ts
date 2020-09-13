@@ -1,18 +1,29 @@
 import { CellType, GameCell } from '../types';
 
-export const removeAndIncreaseCells = (cells: GameCell[]): GameCell[] => cells
-  .filter((cell) => cell.state !== CellType.DYING)
-  .map((cell) => {
-    const processedCell = cell;
-    // if (processedCell.state === CellType.INCREASE && processedCell?.by?.value) {
-    //   processedCell.value += processedCell.by.value;
-    // }
+export const removeAndIncreaseCells = (
+  cells: GameCell[],
+): [ GameCell[], number ] => {
+  const gainedScores: number[] = [];
 
-    if (processedCell.state === CellType.INCREASE) {
-      processedCell.value *= 2;
-    }
+  const updatedCells = cells
+    .filter((cell) => cell.state !== CellType.DYING)
+    .map((cell) => {
+      const processedCell = cell;
+      // if (processedCell.state === CellType.INCREASE && processedCell?.by?.value) {
+      //   processedCell.value += processedCell.by.value;
+      // }
 
-    processedCell.state = CellType.IDLE;
+      if (processedCell.state === CellType.INCREASE) {
+        processedCell.value *= 2;
+        gainedScores.push(processedCell.value);
+      }
 
-    return processedCell;
-  });
+      processedCell.state = CellType.IDLE;
+
+      return processedCell;
+    });
+
+  const gainedScoreSum = gainedScores.reduce((acc, scores) => acc + scores, 0);
+
+  return [updatedCells, gainedScoreSum];
+};

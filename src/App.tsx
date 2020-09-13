@@ -8,7 +8,7 @@ import Layout from './components/Layout';
 import Field from './components/Field';
 import ControlPanel from './components/ControlPanel';
 import Button from './components/Button';
-import Score from './components/Score';
+import Scoreboard from './components/Scoreboard';
 
 const initCells : GameCell[] = createInitialCells();
 
@@ -33,15 +33,11 @@ const App: FC = () => {
   const handleKeyPress = (event: KeyboardEvent): void => {
     if (Object.keys(mappedKeysToDirections).includes(event.code)) {
       const movedCells = getNewCellsPosition(cells, mappedKeysToDirections[event.code]);
+      const [updatedCells, gainedScores] = removeAndIncreaseCells(movedCells);
+      const resultCells = populateFieldWithNewCells(updatedCells);
 
-      // console.log(movedCells);
-
-      // setCells(movedCells);
-
-      // setCells(removeAndIncreaseCells(movedCells));
-      // setCells(populateFieldWithNewCells(cells));
-
-      setCells(populateFieldWithNewCells(removeAndIncreaseCells(movedCells)));
+      setCells(resultCells);
+      setScores(gainedScores);
     }
   };
 
@@ -57,7 +53,7 @@ const App: FC = () => {
     <Layout>
       <ControlPanel>
         <Button onClick={runNewGame}>New Game</Button>
-        <Score>{scores}</Score>
+        <Scoreboard gainedScores={scores} />
       </ControlPanel>
       <Field cells={cells} />
     </Layout>

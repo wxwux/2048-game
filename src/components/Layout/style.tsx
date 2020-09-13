@@ -10,7 +10,6 @@ export const Main = styled.main`
 
 export const Content = styled.div`
   min-height: 600px;
-  width: 600px;
   display: flex;
   flex-direction: column;
   align-items: center;

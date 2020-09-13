@@ -12,9 +12,9 @@ interface CellProps {
 }
 
 export const FieldTag = styled.div`
-  height: 475px;
+  height: 450px;
+  width: 450px;
   position: relative;
-  width: 475px;
 `;
 
 export const Background = styled.div`
