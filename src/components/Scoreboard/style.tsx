@@ -19,6 +19,7 @@ export const Addition = styled.div<ScoresProps>`
   
   ${({ animated }) => animated && `
     animation: fadeUp .4s; 
+    animation-delay: .3s;
     animation-fill-mode: forwards;
   `} 
   
