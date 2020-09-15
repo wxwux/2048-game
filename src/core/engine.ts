@@ -75,24 +75,18 @@ export const moveCells: MoveCellsFunction = (
       matrix = substituteCellUpInMatrix(
         matrix, { x, y: currentRowY }, { x, y: prevRowY },
       );
+    }
 
-      currentRowY = prevRowY;
-    } else if (
+    if (
       cellsValuesAreSame(cellAbove, currentCell)
-      && (
-        cellIsInIdleState(cellAbove)
-        || cellIsInMovingState(cellAbove)
-      )
+      && (cellIsInIdleState(cellAbove) || cellIsInMovingState(cellAbove))
     ) {
       matrix = suppressCellUpInMatrix(
         matrix, { x, y: currentRowY }, { x, y: prevRowY },
       );
-
-      currentRowY = prevRowY;
-    } else {
-      break;
     }
 
+    currentRowY = prevRowY;
     prevRowY--;
   }
 
