@@ -1,8 +1,15 @@
 import { cloneDeep } from 'lodash';
+
 import {
-  CellCoords, CellType, Direction, GameCell, MatrixCell, MoveCellsFunction,
+  CellCoords, CellType, Direction, GameCell, Matrix, MatrixCell, MoveCellsFunction,
 } from '../types';
-import { rotateMatrixFromDirection, rotateMatrixToDirection, traverseMatrix } from './matrix';
+
+import {
+  rotateMatrixFromDirection,
+  rotateMatrixToDirection,
+  traverseMatrix,
+} from './matrix';
+
 import { createEmptyMatrix } from './creator';
 import { MATRIX_SIZE } from './constants';
 
@@ -24,11 +31,11 @@ export const cellIsInMovingState = (
   cell: MatrixCell,
 ): boolean => (cell as GameCell).state === CellType.MOVING;
 
-export const substituteCellUpInMatrix = <T extends MatrixCell>(
-  originalMatrix: T[][],
+export const substituteCellUpInMatrix = (
+  originalMatrix: Matrix,
   currentCell: CellCoords,
   substitutedCell: CellCoords,
-): T[][] => {
+): Matrix => {
   const matrix = cloneDeep(originalMatrix);
 
   matrix[substitutedCell.y][substitutedCell.x] = matrix[currentCell.y][currentCell.x];
@@ -38,11 +45,11 @@ export const substituteCellUpInMatrix = <T extends MatrixCell>(
   return matrix;
 };
 
-export const suppressCellUpInMatrix = <T extends MatrixCell>(
-  originalMatrix: T[][],
+export const suppressCellUpInMatrix = (
+  originalMatrix: Matrix,
   currentCell: CellCoords,
   suppressedCell: CellCoords,
-): T[][] => {
+): Matrix => {
   const matrix = cloneDeep(originalMatrix);
 
   (matrix[suppressedCell.y][suppressedCell.x] as GameCell).state = CellType.DYING;

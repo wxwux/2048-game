@@ -22,12 +22,14 @@ export type GameCell = {
   by?: GameCell | null;
 }
 
-export type MatrixCell = GameCell | 0;
-
 export type CellCoords = {
   x: number;
   y: number;
 }
 
+export type MatrixCell = GameCell | 0;
+
+export type Matrix = MatrixCell[][];
+
 export type MoveCellsFunction =
-    <T extends MatrixCell >(matrixToTransform: T[][], x: number, y: number) => T[][];
+    (matrixToTransform: Matrix, x: number, y: number) => Matrix;
