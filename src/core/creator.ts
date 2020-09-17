@@ -56,10 +56,9 @@ export const populateFieldWithNewCells = (cells: GameCell[]): GameCell[] => {
     occupiedCoords.add(generateCheckSumByCoords(cell.x, cell.y));
   });
 
-  // const allCellsAreFilled = occupiedCoords.size === 16;
+  const allCellsAreFilled = occupiedCoords.size === 16;
 
-  // if (!allCellsAreFilled) {
-  // }
+  if (allCellsAreFilled) return cells;
 
   const [x, y] = getAvailableCoords(occupiedCoords);
   occupiedCoords.add(generateCheckSumByCoords(x, y));
