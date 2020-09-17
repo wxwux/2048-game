@@ -121,4 +121,10 @@ export const moveCellsToDirection = (
   return finalMatrix.flat(2).filter((cell: MatrixCell) => cell !== 0);
 };
 
+export const checkAvailableMoves = (cells: GameCell[]): boolean => {
+  const matrix = buildMatrixBasedOnCells(cells);
 
+
+  console.log(matrix);
+  return true;
+};

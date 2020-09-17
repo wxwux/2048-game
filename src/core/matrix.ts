@@ -6,7 +6,7 @@ import { MATRIX_SIZE } from './constants';
 
 export const generateCheckSumByCoords = (x: number, y: number) => x * MATRIX_SIZE + y;
 
-export const traverseMatrix = <T extends MatrixCell>(
+export const traverseMatrix = <T>(
   matrixToTraverse: T[][],
   cb: (matrix: T[][], x: number, y: number) => T[][],
 ): T[][] => {
@@ -14,9 +14,7 @@ export const traverseMatrix = <T extends MatrixCell>(
 
   for (let y = 0; y < MATRIX_SIZE; y++) {
     for (let x = 0; x < MATRIX_SIZE; x++) {
-      if (matrix[y][x] !== 0) {
-        matrix = cb(matrix, x, y) as T[][];
-      }
+      matrix = cb(matrix, x, y) as T[][];
     }
   }
 
@@ -38,21 +36,18 @@ export const matrixAreSame = (
   return prevCellsSum === currentCellsSum;
 };
 
-export const reverseRows = <T>(matrix: T[][]): T[][] => {
-  const clonedMatrix: T[][] = cloneDeep<T[][]>(matrix);
-
-  for (let y = 0; y < MATRIX_SIZE; y++) {
-    for (let x = 0; x < MATRIX_SIZE; x++) {
-      if (x % 2 === 0) {
-        const temp: T = clonedMatrix[y][MATRIX_SIZE - x - 1];
-        clonedMatrix[y][MATRIX_SIZE - x - 1] = clonedMatrix[y][x];
-        clonedMatrix[y][x] = temp;
-      }
+export const reverseRows = <T>(matrix: T[][]): T[][] => traverseMatrix<T>(
+  matrix,
+  (traversedMatrix, x, y) => {
+    const matrixWithReverseRows = traversedMatrix;
+    if (x % 2 === 0) {
+      const temp: T = matrixWithReverseRows[y][MATRIX_SIZE - x - 1];
+      matrixWithReverseRows[y][MATRIX_SIZE - x - 1] = matrixWithReverseRows[y][x];
+      matrixWithReverseRows[y][x] = temp;
     }
-  }
-
-  return clonedMatrix;
-};
+    return matrixWithReverseRows;
+  },
+);
 
 export const transpose = <T>(matrix: T[][]): T[][] => {
   const clonedMatrix: T[][] = cloneDeep<T[][]>(matrix);

@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { GameCell, Direction, Matrix } from './types';
 import { createInitialCells, populateFieldWithNewCells } from './core/creator';
-import { moveCellsToDirection } from './core/engine';
+import { checkAvailableMoves, moveCellsToDirection } from './core/engine';
 import { removeAndIncreaseCells } from './core/updater';
 
 import Layout from './components/Layout';
@@ -39,6 +39,8 @@ const App: FC = () => {
     if (!matrixAreSame(cells, cleanedAndIncreasedCells)) {
       resultCells = populateFieldWithNewCells(cleanedAndIncreasedCells);
     }
+
+    checkAvailableMoves(resultCells);
 
     setCells(resultCells);
     setScores(gainedScores);
