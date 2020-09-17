@@ -19,7 +19,6 @@ export type GameCell = {
   y: number;
   value: number;
   state: CellType;
-  by?: GameCell | null;
 }
 
 export type CellCoords = {

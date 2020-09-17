@@ -8,7 +8,6 @@ export const create = (cell: GameCell): GameCell => ({
   id: cell.id ? cell.id : uniqueId(),
   value: cell.value,
   state: cell.state,
-  by: null,
 });
 
 export const getRandomCoords = () : number => Math.floor(Math.random() * 3.9);

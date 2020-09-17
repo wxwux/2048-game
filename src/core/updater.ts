@@ -9,9 +9,6 @@ export const removeAndIncreaseCells = (
     .filter((cell) => cell.state !== CellType.DYING)
     .map((cell) => {
       const processedCell = cell;
-      // if (processedCell.state === CellType.INCREASE && processedCell?.by?.value) {
-      //   processedCell.value += processedCell.by.value;
-      // }
 
       if (processedCell.state === CellType.INCREASE) {
         processedCell.value *= 2;

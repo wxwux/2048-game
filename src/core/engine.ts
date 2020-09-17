@@ -7,7 +7,7 @@ import {
 import {
   rotateMatrixFromDirection,
   rotateMatrixToDirection,
-  traverseMatrix
+  traverseMatrix,
 } from './matrix';
 
 import { createEmptyMatrix } from './creator';
@@ -54,10 +54,6 @@ export const suppressCellUpInMatrix = (
 
   (matrix[suppressedCell.y][suppressedCell.x] as GameCell).state = CellType.DYING;
   (matrix[currentCell.y][currentCell.x] as GameCell).state = CellType.INCREASE;
-
-  // if ('by' in (matrix[suppressedCell.y][suppressedCell.x] as GameCell)) {
-  //   (matrix[suppressedCell.y][suppressedCell.x] as GameCell).by = matrix[currentCell.y][currentCell.x] as GameCell;
-  // }
 
   matrix[suppressedCell.y][suppressedCell.x] = matrix[currentCell.y][currentCell.x];
   (matrix[currentCell.y][currentCell.x] as number) = 0;
