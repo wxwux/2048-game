@@ -10,8 +10,7 @@ import {
   traverseMatrix,
 } from './matrix';
 
-import { createEmptyMatrix } from './creator';
-import { MATRIX_SIZE } from './constants';
+import { buildMatrixBasedOnCells } from './creator';
 
 export const cellIsEmpty = (cell: MatrixCell): boolean => cell === 0;
 
@@ -108,20 +107,18 @@ export const updateCellsCoords: MoveCellsFunction = (
   return matrix;
 };
 
-export const getNewCellsPosition = (
+export const moveCellsToDirection = (
   cellsToMove: GameCell[], direction: Direction,
 ): GameCell[] => {
   const cells: GameCell[] = cloneDeep<GameCell[]>(cellsToMove);
-  const emptyMatrix = createEmptyMatrix(MATRIX_SIZE);
+  const matrixWithCells = buildMatrixBasedOnCells(cells);
 
-  cells.forEach((cell: GameCell) => {
-    emptyMatrix[cell.y][cell.x] = cell;
-  });
-
-  const rotatedMatrix = rotateMatrixFromDirection<MatrixCell>(emptyMatrix, direction);
+  const rotatedMatrix = rotateMatrixFromDirection<MatrixCell>(matrixWithCells, direction);
   const transformedMatrix = traverseMatrix<MatrixCell>(rotatedMatrix, moveCells);
   const rotatedBackMatrix = rotateMatrixToDirection<MatrixCell>(transformedMatrix, direction);
   const finalMatrix = traverseMatrix<MatrixCell>(rotatedBackMatrix, updateCellsCoords);
 
   return finalMatrix.flat(2).filter((cell: MatrixCell) => cell !== 0);
 };
+
+

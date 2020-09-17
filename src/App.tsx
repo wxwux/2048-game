@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { GameCell, Direction, Matrix } from './types';
 import { createInitialCells, populateFieldWithNewCells } from './core/creator';
-import { getNewCellsPosition } from './core/engine';
+import { moveCellsToDirection } from './core/engine';
 import { removeAndIncreaseCells } from './core/updater';
 
 import Layout from './components/Layout';
@@ -32,7 +32,7 @@ const App: FC = () => {
   };
 
   const updateFieldByDirection = (direction: Direction) => {
-    const movedCells = getNewCellsPosition(cells, direction);
+    const movedCells = moveCellsToDirection(cells, direction);
     const [cleanedAndIncreasedCells, gainedScores] = removeAndIncreaseCells(movedCells);
     let resultCells: GameCell[] = cleanedAndIncreasedCells;
 
