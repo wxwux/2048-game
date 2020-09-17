@@ -1,6 +1,6 @@
 import { cloneDeep, uniqueId } from 'lodash';
 import { CellType, GameCell, MatrixCell } from '../types';
-import { MATRIX_SIZE } from './constants';
+import { generateCheckSumByCoords } from './matrix';
 
 export const create = (cell: GameCell): GameCell => ({
   x: cell.x,
@@ -12,7 +12,6 @@ export const create = (cell: GameCell): GameCell => ({
 });
 
 export const getRandomCoords = () : number => Math.floor(Math.random() * 3.9);
-export const generateCheckSum = (x: number, y: number) => x * MATRIX_SIZE + y;
 
 export const createInitialCells = () : GameCell[] => {
   const firstCell: GameCell = create({
@@ -45,7 +44,7 @@ export const getAvailableCoords = (occupiedCoords: Set<number>): [number, number
     x = getRandomCoords();
     y = getRandomCoords();
 
-    takenCoords.add(generateCheckSum(x, y));
+    takenCoords.add(generateCheckSumByCoords(x, y));
   } while (prevSetSize === takenCoords.size);
 
   return [x, y];
@@ -55,7 +54,7 @@ export const populateFieldWithNewCells = (cells: GameCell[]): GameCell[] => {
   const occupiedCoords = new Set<number>();
 
   cells.forEach((cell) => {
-    occupiedCoords.add(generateCheckSum(cell.x, cell.y));
+    occupiedCoords.add(generateCheckSumByCoords(cell.x, cell.y));
   });
 
   // const allCellsAreFilled = occupiedCoords.size === 16;
@@ -64,7 +63,7 @@ export const populateFieldWithNewCells = (cells: GameCell[]): GameCell[] => {
   // }
 
   const [x, y] = getAvailableCoords(occupiedCoords);
-  occupiedCoords.add(generateCheckSum(x, y));
+  occupiedCoords.add(generateCheckSumByCoords(x, y));
 
   return [...cells, create({
     x, y, value: 2, state: CellType.BORN,

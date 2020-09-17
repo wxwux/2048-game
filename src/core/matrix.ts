@@ -1,21 +1,41 @@
 import { cloneDeep } from 'lodash';
-import { Direction, MatrixCell, MoveCellsFunction } from '../types';
+import {
+  Direction, MoveCellsFunction, Matrix, MatrixCell, GameCell,
+} from '../types';
 import { MATRIX_SIZE } from './constants';
 
+export const generateCheckSumByCoords = (x: number, y: number) => x * MATRIX_SIZE + y;
+
 export const traverseMatrix = <T extends MatrixCell>(
-  matrixToTraverse: T[][], cb: MoveCellsFunction,
+  matrixToTraverse: T[][],
+  cb: (matrix: T[][], x: number, y: number) => T[][],
 ): T[][] => {
-  let matrix = cloneDeep(matrixToTraverse);
+  let matrix = cloneDeep<T[][]>(matrixToTraverse);
 
   for (let y = 0; y < MATRIX_SIZE; y++) {
     for (let x = 0; x < MATRIX_SIZE; x++) {
       if (matrix[y][x] !== 0) {
-        matrix = cb(matrix, x, y);
+        matrix = cb(matrix, x, y) as T[][];
       }
     }
   }
 
   return matrix;
+};
+
+export const matrixAreSame = (
+  prevCellsSet: GameCell[],
+  currentCellsSet: GameCell[],
+) : boolean => {
+  const prevCellsSum = prevCellsSet.reduce((
+    acc, cell,
+  ) => acc + generateCheckSumByCoords(cell.x, cell.y), 0);
+
+  const currentCellsSum = currentCellsSet.reduce((
+    acc, cell,
+  ) => acc + generateCheckSumByCoords(cell.x, cell.y), 0);
+
+  return prevCellsSum === currentCellsSum;
 };
 
 export const reverseRows = <T>(matrix: T[][]): T[][] => {

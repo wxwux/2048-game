@@ -27,7 +27,7 @@ export type CellCoords = {
   y: number;
 }
 
-export type MatrixCell = GameCell | 0;
+export type MatrixCell = GameCell | number;
 
 export type Matrix = MatrixCell[][];
 

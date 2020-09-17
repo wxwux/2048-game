@@ -7,7 +7,7 @@ import {
 import {
   rotateMatrixFromDirection,
   rotateMatrixToDirection,
-  traverseMatrix,
+  traverseMatrix
 } from './matrix';
 
 import { createEmptyMatrix } from './creator';
@@ -125,7 +125,7 @@ export const getNewCellsPosition = (
   const rotatedMatrix = rotateMatrixFromDirection<MatrixCell>(emptyMatrix, direction);
   const transformedMatrix = traverseMatrix<MatrixCell>(rotatedMatrix, moveCells);
   const rotatedBackMatrix = rotateMatrixToDirection<MatrixCell>(transformedMatrix, direction);
-  const finalMatrix = traverseMatrix(rotatedBackMatrix, updateCellsCoords);
+  const finalMatrix = traverseMatrix<MatrixCell>(rotatedBackMatrix, updateCellsCoords);
 
   return finalMatrix.flat(2).filter((cell: MatrixCell) => cell !== 0);
 };
