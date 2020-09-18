@@ -8,16 +8,14 @@ export const removeAndIncreaseCells = (
   const updatedCells = cells
     .filter((cell) => cell.state !== CellType.DYING)
     .map((cell) => {
-      const processedCell = cell;
-
-      if (processedCell.state === CellType.INCREASE) {
-        processedCell.value *= 2;
-        gainedScores.push(processedCell.value);
+      if (cell.state === CellType.INCREASE) {
+        cell.value *= 2;
+        gainedScores.push(cell.value);
       }
 
-      processedCell.state = CellType.IDLE;
+      cell.state = CellType.IDLE;
 
-      return processedCell;
+      return cell;
     });
 
   const gainedScoreSum = gainedScores.reduce((acc, scores) => acc + scores, 0);

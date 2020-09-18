@@ -14,6 +14,7 @@
         ".tsx"
       ]
     }],
+    "no-param-reassign": "off",
     "import/prefer-default-export": "off",
     "no-mixed-operators": "off",
     "no-plusplus": "off",
