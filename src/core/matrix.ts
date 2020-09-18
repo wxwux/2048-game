@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import {
-  Direction, MoveCellsFunction, Matrix, MatrixCell, GameCell,
+  Direction, GameCell,
 } from '../types';
 import { MATRIX_SIZE } from './constants';
 
@@ -39,33 +39,20 @@ export const matrixAreSame = (
 export const reverseRows = <T>(matrix: T[][]): T[][] => traverseMatrix<T>(
   matrix,
   (traversedMatrix, x, y) => {
-    const matrixWithReverseRows = traversedMatrix;
-    if (x % 2 === 0) {
-      const temp: T = matrixWithReverseRows[y][MATRIX_SIZE - x - 1];
-      matrixWithReverseRows[y][MATRIX_SIZE - x - 1] = matrixWithReverseRows[y][x];
-      matrixWithReverseRows[y][x] = temp;
+    if (x <= 0) {
+      traversedMatrix[y] = traversedMatrix[y].reverse();
     }
-    return matrixWithReverseRows;
+    return traversedMatrix;
   },
 );
 
-export const transpose = <T>(matrix: T[][]): T[][] => {
-  const clonedMatrix: T[][] = cloneDeep<T[][]>(matrix);
-
-  for (let y = 0, x = 0; y < MATRIX_SIZE; y++) {
-    x = y;
-    while (x < MATRIX_SIZE) {
-      if (y !== x) {
-        const temp: T = clonedMatrix[y][x];
-        clonedMatrix[y][x] = clonedMatrix[x][y];
-        clonedMatrix[x][y] = temp;
-      }
-      x++;
-    }
-  }
-
-  return clonedMatrix;
-};
+export const transpose = <T>(matrix: T[][]): T[][] => traverseMatrix<T>(
+  matrix,
+  (traversedMatrix, x, y) => {
+    traversedMatrix[y][x] = matrix[x][y];
+    return traversedMatrix;
+  },
+);
 
 export const rotateMatrix = <T>(matrix: T[][]): T[][] => {
   const transposedMatrix: T[][] = transpose(matrix);
