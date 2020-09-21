@@ -97,11 +97,11 @@ export const moveCells: MoveCellsFunction = (
 };
 
 export const updateCellsCoords: MoveCellsFunction = (
-  cellsToSwap, x, y,
+  cellsToUpdate, x, y,
 ) => {
-  if (cellsToSwap[y][x] === 0) return cellsToSwap;
+  if (cellsToUpdate[y][x] === 0) return cellsToUpdate;
 
-  const matrix = cloneDeep(cellsToSwap);
+  const matrix = cloneDeep(cellsToUpdate);
   (matrix[y][x] as GameCell).y = y;
   (matrix[y][x] as GameCell).x = x;
 

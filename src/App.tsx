@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { GameCell, Direction, Matrix } from './types';
+import { GameCell, Direction } from './types';
 import { createInitialCells, populateFieldWithNewCells } from './core/creator';
 import { checkAvailableMoves, isEmptyCellsExist, moveCellsToDirection } from './core/engine';
 import { removeAndIncreaseCells } from './core/updater';
@@ -46,7 +46,7 @@ const App: FC = () => {
       const fieldHasAvailableCells = isEmptyCellsExist(resultCells);
 
       if (!fieldHasAvailableCells) {
-
+        // TODO: check if any moves available
       }
     }
 
