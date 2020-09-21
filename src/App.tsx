@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { GameCell, Direction, Matrix } from './types';
 import { createInitialCells, populateFieldWithNewCells } from './core/creator';
-import { checkAvailableMoves, moveCellsToDirection } from './core/engine';
+import { checkAvailableMoves, isEmptyCellsExist, moveCellsToDirection } from './core/engine';
 import { removeAndIncreaseCells } from './core/updater';
 
 import Layout from './components/Layout';
@@ -11,7 +11,11 @@ import Button from './components/Button';
 import Scoreboard from './components/Scoreboard';
 import { matrixAreSame } from './core/matrix';
 
+import { withDynamicCounter } from './HOC/withDynamicCounter';
+
 const initCells : GameCell[] = createInitialCells();
+
+const ScoresWithDynamicCounter = withDynamicCounter(Scoreboard);
 
 const mappedKeysToDirections: {
   [key: string]: Direction
@@ -38,6 +42,12 @@ const App: FC = () => {
 
     if (!matrixAreSame(cells, cleanedAndIncreasedCells)) {
       resultCells = populateFieldWithNewCells(cleanedAndIncreasedCells);
+
+      const fieldHasAvailableCells = isEmptyCellsExist(resultCells);
+
+      if (!fieldHasAvailableCells) {
+
+      }
     }
 
     checkAvailableMoves(resultCells);
@@ -64,7 +74,7 @@ const App: FC = () => {
     <Layout>
       <ControlPanel>
         <Button onClick={runNewGame}>New Game</Button>
-        <Scoreboard gainedScores={scores} />
+        <ScoresWithDynamicCounter gainedScores={scores} title="score" />
       </ControlPanel>
       <Field cells={cells} />
     </Layout>

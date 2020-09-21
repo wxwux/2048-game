@@ -4,7 +4,7 @@ import {
 } from '../types';
 import { MATRIX_SIZE } from './constants';
 
-export const generateCheckSumByCoords = (x: number, y: number) => x * MATRIX_SIZE + y;
+export const generateCheckSumByCoords = (x: number, y: number): number => x * MATRIX_SIZE + y;
 
 export const traverseMatrix = <T>(
   matrixToTraverse: T[][],

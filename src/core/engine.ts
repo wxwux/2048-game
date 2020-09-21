@@ -10,7 +10,8 @@ import {
   traverseMatrix,
 } from './matrix';
 
-import { buildMatrixBasedOnCells } from './creator';
+import { buildMatrixWithCells } from './creator';
+import { MATRIX_SIZE } from './constants';
 
 export const cellIsEmpty = (cell: MatrixCell): boolean => cell === 0;
 
@@ -111,7 +112,7 @@ export const moveCellsToDirection = (
   cellsToMove: GameCell[], direction: Direction,
 ): GameCell[] => {
   const cells: GameCell[] = cloneDeep<GameCell[]>(cellsToMove);
-  const matrixWithCells = buildMatrixBasedOnCells(cells);
+  const matrixWithCells = buildMatrixWithCells(cells);
 
   const rotatedMatrix = rotateMatrixFromDirection<MatrixCell>(matrixWithCells, direction);
   const transformedMatrix = traverseMatrix<MatrixCell>(rotatedMatrix, moveCells);
@@ -121,10 +122,19 @@ export const moveCellsToDirection = (
   return finalMatrix.flat(2).filter((cell: MatrixCell) => cell !== 0);
 };
 
+export const isEmptyCellsExist = (occupiedCells: GameCell[]) : boolean => {
+  const availableCells = MATRIX_SIZE * MATRIX_SIZE;
+  return occupiedCells.length < availableCells;
+};
+
 export const checkAvailableMoves = (cells: GameCell[]): boolean => {
-  const matrix = buildMatrixBasedOnCells(cells);
+  // const matrix: Matrix = buildMatrixWithCells(cells);
+  //
+  // traverseMatrix(matrix,
+  //   (traversedMatrix, x, y) => {
+  //     const currentCell = traversedMatrix[y][x];
+  //     // const topCell = traversedMatrix[]
+  //   });
 
-
-  console.log(matrix);
   return true;
 };

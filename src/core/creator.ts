@@ -36,7 +36,7 @@ export const createEmptyMatrix = (matrixSize: number): MatrixCell[][] => Array.f
   new Array(matrixSize), () => Array.from(new Array(matrixSize), () => 0),
 );
 
-export const buildMatrixBasedOnCells = (cells: GameCell[]): Matrix => {
+export const buildMatrixWithCells = (cells: GameCell[]): Matrix => {
   const matrixToFill = createEmptyMatrix(MATRIX_SIZE);
 
   cells.forEach((cell: GameCell) => {
@@ -70,7 +70,6 @@ export const populateFieldWithNewCells = (cells: GameCell[]): GameCell[] => {
   });
 
   const allCellsAreFilled = occupiedCoords.size === 16;
-
   if (allCellsAreFilled) return cells;
 
   const [x, y] = getAvailableCoords(occupiedCoords);
@@ -80,3 +79,5 @@ export const populateFieldWithNewCells = (cells: GameCell[]): GameCell[] => {
     x, y, value: 2, state: CellType.BORN,
   })];
 };
+
+
