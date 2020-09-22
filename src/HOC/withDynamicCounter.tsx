@@ -1,7 +1,7 @@
-import React, { useEffect, useState, FC } from 'react';
+import React, {
+  useEffect, useState, FC, ReactElement,
+} from 'react';
 import styled from 'styled-components';
-
-// @ts-ignore
 
 interface ScoresProps {
   animated: boolean;
@@ -44,7 +44,7 @@ type HOCPropTypes = {
 
 export const withDynamicCounter = (WrappedComponent: FC<WrappedPropTypes>) => function (
   { gainedScores, title }: HOCPropTypes,
-) {
+): ReactElement {
   const [scores, setScores] = useState<number>(0);
   const [animationStarted, setAnimationStarted] = useState<boolean>(false);
 

@@ -3,6 +3,7 @@ import { GameCell, Direction } from './types';
 import { createInitialCells, populateFieldWithNewCells } from './core/creator';
 import { checkAvailableMoves, isEmptyCellsExist, moveCellsToDirection } from './core/engine';
 import { removeAndIncreaseCells } from './core/updater';
+import { scoresService } from './services/scores';
 
 import Layout from './components/Layout';
 import Field from './components/Field';
@@ -75,6 +76,7 @@ const App: FC = () => {
       <ControlPanel>
         <Button onClick={runNewGame}>New Game</Button>
         <ScoresWithDynamicCounter gainedScores={scores} title="score" />
+        <Scoreboard scores={scoresService.get()} title="Best" />
       </ControlPanel>
       <Field cells={cells} />
     </Layout>
