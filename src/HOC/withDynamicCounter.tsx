@@ -39,18 +39,17 @@ type WrappedPropTypes = {
 
 type HOCPropTypes = {
   gainedScores: number,
-  title: string
+  title: string,
+  scores: number
 }
 
 export const withDynamicCounter = (WrappedComponent: FC<WrappedPropTypes>) => function (
-  { gainedScores, title }: HOCPropTypes,
+  { gainedScores, title, scores }: HOCPropTypes,
 ): ReactElement {
-  const [scores, setScores] = useState<number>(0);
   const [animationStarted, setAnimationStarted] = useState<boolean>(false);
 
   useEffect(() => {
     setAnimationStarted(false);
-    setScores((prevScores) => prevScores + gainedScores);
 
     let timemout = 0;
     if (timemout > 0) clearTimeout(timemout);

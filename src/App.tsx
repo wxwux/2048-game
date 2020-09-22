@@ -18,6 +18,8 @@ const initCells : GameCell[] = createInitialCells();
 
 const ScoresWithDynamicCounter = withDynamicCounter(Scoreboard);
 
+const bestScore = scoresService.get();
+
 const mappedKeysToDirections: {
   [key: string]: Direction
 } = {
@@ -29,17 +31,19 @@ const mappedKeysToDirections: {
 
 const App: FC = () => {
   const [cells, setCells] = useState<GameCell[]>(initCells);
-  const [scores, setScores] = useState<number>(0);
+  const [totalScores, setTotalScores] = useState<number>(0);
+  const [gainedScores, setGainedScores] = useState<number>(0);
 
   const runNewGame = (): void => {
     setCells(createInitialCells());
-    setScores(0);
+    setTotalScores(0);
   };
 
   const updateFieldByDirection = (direction: Direction) => {
     const movedCells = moveCellsToDirection(cells, direction);
-    const [cleanedAndIncreasedCells, gainedScores] = removeAndIncreaseCells(movedCells);
+    const [cleanedAndIncreasedCells, gainedScoresAfterMove] = removeAndIncreaseCells(movedCells);
     let resultCells: GameCell[] = cleanedAndIncreasedCells;
+    const totalScoreAfterMove = totalScores + gainedScoresAfterMove;
 
     if (!matrixAreSame(cells, cleanedAndIncreasedCells)) {
       resultCells = populateFieldWithNewCells(cleanedAndIncreasedCells);
@@ -54,7 +58,12 @@ const App: FC = () => {
     checkAvailableMoves(resultCells);
 
     setCells(resultCells);
-    setScores(gainedScores);
+    setGainedScores(gainedScoresAfterMove);
+    setTotalScores(totalScoreAfterMove);
+
+    if (totalScoreAfterMove > bestScore) {
+      scoresService.save(totalScoreAfterMove);
+    }
   };
 
   const handleKeyPress = (event: KeyboardEvent): void => {
@@ -75,8 +84,8 @@ const App: FC = () => {
     <Layout>
       <ControlPanel>
         <Button onClick={runNewGame}>New Game</Button>
-        <ScoresWithDynamicCounter gainedScores={scores} title="score" />
-        <Scoreboard scores={scoresService.get()} title="Best" />
+        <ScoresWithDynamicCounter gainedScores={gainedScores} scores={totalScores} title="score" />
+        <Scoreboard scores={bestScore} title="Best" />
       </ControlPanel>
       <Field cells={cells} />
     </Layout>
