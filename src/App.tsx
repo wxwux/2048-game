@@ -3,7 +3,7 @@ import { GameCell, Direction } from './types';
 import { createInitialCells, populateFieldWithNewCells } from './core/creator';
 import { checkAvailableMoves, isEmptyCellsExist, moveCellsToDirection } from './core/engine';
 import { removeAndIncreaseCells } from './core/updater';
-import { scoresService } from './services/scores';
+import { scoreService } from './services/score';
 
 import Layout from './components/Layout';
 import Field from './components/Field';
@@ -18,7 +18,7 @@ const initCells : GameCell[] = createInitialCells();
 
 const ScoresWithDynamicCounter = withDynamicCounter(Scoreboard);
 
-const bestScore = scoresService.get();
+let bestScore = scoreService.get();
 
 const mappedKeysToDirections: {
   [key: string]: Direction
@@ -35,6 +35,7 @@ const App: FC = () => {
   const [gainedScores, setGainedScores] = useState<number>(0);
 
   const runNewGame = (): void => {
+    bestScore = scoreService.get();
     setCells(createInitialCells());
     setTotalScores(0);
   };
@@ -62,7 +63,7 @@ const App: FC = () => {
     setTotalScores(totalScoreAfterMove);
 
     if (totalScoreAfterMove > bestScore) {
-      scoresService.save(totalScoreAfterMove);
+      scoreService.save(totalScoreAfterMove);
     }
   };
 
@@ -84,8 +85,8 @@ const App: FC = () => {
     <Layout>
       <ControlPanel>
         <Button onClick={runNewGame}>New Game</Button>
-        <ScoresWithDynamicCounter gainedScores={gainedScores} scores={totalScores} title="score" />
-        <Scoreboard scores={bestScore} title="Best" />
+        <ScoresWithDynamicCounter gainedScores={gainedScores} score={totalScores} title="score" />
+        <Scoreboard score={bestScore} title="Best" />
       </ControlPanel>
       <Field cells={cells} />
     </Layout>

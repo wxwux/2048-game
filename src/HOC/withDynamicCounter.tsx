@@ -33,18 +33,18 @@ export const Container = styled.div`
 `;
 
 type WrappedPropTypes = {
-  scores: number,
+  score: number,
   title: string
 }
 
 type HOCPropTypes = {
   gainedScores: number,
   title: string,
-  scores: number
+  score: number
 }
 
 export const withDynamicCounter = (WrappedComponent: FC<WrappedPropTypes>) => function (
-  { gainedScores, title, scores }: HOCPropTypes,
+  { gainedScores, title, score }: HOCPropTypes,
 ): ReactElement {
   const [animationStarted, setAnimationStarted] = useState<boolean>(false);
 
@@ -72,7 +72,7 @@ export const withDynamicCounter = (WrappedComponent: FC<WrappedPropTypes>) => fu
           </Addition>
         )
       }
-      <WrappedComponent scores={scores} title={title} />
+      <WrappedComponent score={score} title={title} />
     </Container>
   );
 };

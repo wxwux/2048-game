@@ -1,18 +1,18 @@
 import React, { FC } from 'react';
 import {
-  Scores, Title, Counter,
+  Score, Title, Counter,
 } from './style';
 
 type PropTypes = {
-  scores: number,
+  score: number,
   title: string
 }
 
-const Scoreboard: FC<PropTypes> = ({ scores, title }: PropTypes) => (
-  <Scores>
+const Scoreboard: FC<PropTypes> = ({ score, title }: PropTypes) => (
+  <Score>
     <Title>{title}</Title>
-    <Counter>{scores}</Counter>
-  </Scores>
+    <Counter>{score}</Counter>
+  </Score>
 );
 
 export default Scoreboard;

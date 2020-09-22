@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Scores = styled.div`
+export const Score = styled.div`
   padding: 10px 25px;
   background-color: #eee;
   border-radius: 5px;

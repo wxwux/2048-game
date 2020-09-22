@@ -18,7 +18,7 @@ export const removeAndIncreaseCells = (
       return cell;
     });
 
-  const gainedScoreSum = gainedScores.reduce((acc, scores) => acc + scores, 0);
+  const gainedScoreSum = gainedScores.reduce((acc, score) => acc + score, 0);
 
   return [updatedCells, gainedScoreSum];
 };
