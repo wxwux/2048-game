@@ -1,19 +1,21 @@
-import React, { FC, ReactNode } from 'react';
-import styled from 'styled-components';
+import React, { FC, ReactNode, MouseEvent } from 'react';
+import { Container, Controlls, Board } from './style';
+import Button from '../Button';
 
 type PropTypes = {
-  children: ReactNode
+  children: ReactNode,
+  onRunNewGame: () => void;
 }
 
-const ControlPanel: FC<PropTypes> = ({ children }: PropTypes) => <Container>{children}</Container>;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 20px 0;
-  width: 100%;
-  align-items: center;
-`;
+const ControlPanel: FC<PropTypes> = ({ children, onRunNewGame }: PropTypes) => (
+  <Container>
+    <Controlls>
+      <Button onClick={onRunNewGame}>New Game</Button>
+    </Controlls>
+    <Board>
+      {children}
+    </Board>
+  </Container>
+);
 
 export default ControlPanel;

@@ -8,7 +8,6 @@ import { scoreService } from './services/score';
 import Layout from './components/Layout';
 import Field from './components/Field';
 import ControlPanel from './components/ControlPanel';
-import Button from './components/Button';
 import Scoreboard from './components/Scoreboard';
 import { matrixAreSame } from './core/matrix';
 
@@ -83,8 +82,7 @@ const App: FC = () => {
 
   return (
     <Layout>
-      <ControlPanel>
-        <Button onClick={runNewGame}>New Game</Button>
+      <ControlPanel onRunNewGame={runNewGame}>
         <ScoresWithDynamicCounter gainedScores={gainedScores} score={totalScores} title="score" />
         <Scoreboard score={bestScore} title="Best" />
       </ControlPanel>
