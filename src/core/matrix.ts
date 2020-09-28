@@ -8,14 +8,21 @@ export const generateCheckSumByCoords = (x: number, y: number): number => x * MA
 
 export const traverseMatrix = <T>(
   matrixToTraverse: T[][],
-  cb: (matrix: T[][], x: number, y: number) => T[][],
+  cb: (
+    matrix: T[][], x: number, y: number, breakLoopFn?: () => void
+  ) => T[][],
 ): T[][] => {
   let matrix = cloneDeep<T[][]>(matrixToTraverse);
+  let breakLoop = false;
 
   for (let y = 0; y < MATRIX_SIZE; y++) {
     for (let x = 0; x < MATRIX_SIZE; x++) {
-      matrix = cb(matrix, x, y) as T[][];
+      matrix = cb(matrix, x, y, () => {
+        breakLoop = true;
+      }) as T[][];
+      if (breakLoop) break;
     }
+    if (breakLoop) break;
   }
 
   return matrix;
