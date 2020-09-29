@@ -1,5 +1,4 @@
 import { cloneDeep } from 'lodash';
-
 import {
   CellCoords, CellType, Direction, GameCell, Matrix, MatrixCell, MoveCellsFunction,
 } from '../types';
@@ -127,14 +126,70 @@ export const isEmptyCellsExist = (occupiedCells: GameCell[]) : boolean => {
   return occupiedCells.length < availableCells;
 };
 
-export const checkAvailableMoves = (cells: GameCell[]): boolean => {
-  // const matrix: Matrix = buildMatrixWithCells(cells);
-  //
-  // traverseMatrix(matrix,
-  //   (traversedMatrix, x, y) => {
-  //     const currentCell = traversedMatrix[y][x];
-  //     // const topCell = traversedMatrix[]
-  //   });
+export const getNeighbourCells = (
+  matrix: Matrix, currentX: number, currentY: number,
+): GameCell[] => {
+  let aboveCell: MatrixCell = 0;
+  let belowCell: MatrixCell = 0;
+  let nextCell: MatrixCell = 0;
+  let prevCell: MatrixCell = 0;
 
-  return true;
+  const aboveCellY = currentY - 1;
+  const belowCellY = currentY + 1;
+  const nextCellX = currentX + 1;
+  const prevCellX = currentX - 1;
+
+  if (aboveCellY >= 0) {
+    aboveCell = matrix[aboveCellY][currentX];
+  }
+
+  if (belowCellY < MATRIX_SIZE - 1) {
+    belowCell = matrix[belowCellY][currentX];
+  }
+
+  if (prevCellX >= 0) {
+    prevCell = matrix[currentY][prevCellX];
+  }
+
+  if (nextCellX < MATRIX_SIZE) {
+    nextCell = matrix[currentY][nextCellX];
+  }
+
+  return [aboveCell, belowCell, nextCell, prevCell].filter(
+    (cell) => cell !== 0,
+  ) as GameCell[];
+};
+
+export const checkCellsValuesAreSame = (
+  currentCell: GameCell, neighbourCells: GameCell[],
+): boolean => {
+  const values = new Set<number>();
+
+  neighbourCells.forEach((cell) => {
+    const cellValue: number = cell.value;
+    values.add(cellValue);
+  });
+
+  return values.has(currentCell.value);
+};
+
+export const checkAvailableMoves = (cells: GameCell[]): boolean => {
+  const matrix: Matrix = buildMatrixWithCells(cells);
+  let hasAvailableMove = false;
+
+  traverseMatrix(matrix,
+    (traversedMatrix, x, y, breakLoop) => {
+      const currentCell = traversedMatrix[y][x] as MatrixCell;
+      if (currentCell === 0) return traversedMatrix;
+      const neighbourCells = getNeighbourCells(traversedMatrix, x, y);
+      const valuesAreSame = checkCellsValuesAreSame(currentCell as GameCell, neighbourCells);
+
+      if (valuesAreSame) {
+        hasAvailableMove = true;
+        if (typeof breakLoop === 'function') breakLoop();
+      }
+      return traversedMatrix;
+    });
+
+  return hasAvailableMove;
 };

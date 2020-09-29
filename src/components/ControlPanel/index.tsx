@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, MouseEvent } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { Container, Controlls, Board } from './style';
 import Button from '../Button';
 

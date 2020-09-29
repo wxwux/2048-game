@@ -50,12 +50,13 @@ const App: FC = () => {
 
       const fieldHasAvailableCells = isEmptyCellsExist(resultCells);
 
+
       if (!fieldHasAvailableCells) {
-        // TODO: check if any moves available
+        const hasAvailableMove = checkAvailableMoves(resultCells);
+        console.log(hasAvailableMove);
+        // TODO: show screen for the looser
       }
     }
-
-    checkAvailableMoves(resultCells);
 
     setCells(resultCells);
     setGainedScores(gainedScoresAfterMove);

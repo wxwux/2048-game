@@ -18,6 +18,7 @@
     "import/prefer-default-export": "off",
     "no-mixed-operators": "off",
     "no-plusplus": "off",
+    "no-prototype-builtins": "off",
     "import/extensions": [1, "ignorePackages", {
       "ts": "never",
       "tsx": "never"

@@ -79,5 +79,3 @@ export const populateFieldWithNewCells = (cells: GameCell[]): GameCell[] => {
     x, y, value: 2, state: CellType.BORN,
   })];
 };
-
-
