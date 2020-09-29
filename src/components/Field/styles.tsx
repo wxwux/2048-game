@@ -1,4 +1,4 @@
-import styled, { css, keyframes } from 'styled-components';
+import styled from 'styled-components';
 import {
   calcFontSize, calculateBackgroundColor,
 } from './helpers';
@@ -11,10 +11,18 @@ interface CellProps {
   state: CellType;
 }
 
-export const FieldTag = styled.div`
+export const Container = styled.div`
   height: 450px;
   width: 450px;
   position: relative;
+`;
+
+export const SplashContainer = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
 `;
 
 export const Background = styled.div`

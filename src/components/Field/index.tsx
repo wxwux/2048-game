@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import { GameCell } from '../../types';
+import SplashScreen from '../SplashScreen';
 
 import {
-  FieldTag, Background, BackgroundCell, Playground, Cell,
+  Container, Background, BackgroundCell, Playground, Cell, SplashContainer,
 } from './styles';
 
 type PropTypes = {
@@ -10,7 +11,7 @@ type PropTypes = {
 }
 
 const Field : FC<PropTypes> = ({ cells }: PropTypes) => (
-  <FieldTag>
+  <Container>
     <Background>
       {
         Array
@@ -28,7 +29,10 @@ const Field : FC<PropTypes> = ({ cells }: PropTypes) => (
         </Cell>
       ))}
     </Playground>
-  </FieldTag>
+    <SplashContainer>
+      <SplashScreen />
+    </SplashContainer>
+  </Container>
 );
 
 export default Field;

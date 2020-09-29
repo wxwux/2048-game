@@ -20,4 +20,4 @@ export const Title = styled.div`
   color: #eee4da;
   font-size: 13px;
   text-transform: uppercase;
-`
+`;
