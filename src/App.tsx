@@ -2,9 +2,10 @@ import React, { FC, useState, useEffect } from 'react';
 import { GameCell, Direction } from './types';
 
 import { createInitialCells, populateFieldWithNewCells } from './core/creator';
-import { checkAvailableMoves, isEmptyCellsExist, moveCellsToDirection } from './core/engine';
+import {
+  checkAvailableMoves, isEmptyCellsExist, moveCellsToDirection, matrixAreSame,
+} from './core/engine';
 import { removeAndIncreaseCells } from './core/updater';
-import { matrixAreSame } from './core/matrix';
 
 import { scoreService } from './services/score';
 import { withDynamicCounter } from './HOC/withDynamicCounter';

@@ -4,8 +4,9 @@ import {
 } from '../types';
 
 import {
-  rotateMatrixFromDirection,
+  generateCheckSumByCoords,
   rotateMatrixToDirection,
+  rotateMatrixFromDirection,
   traverseMatrix,
 } from './matrix';
 
@@ -20,6 +21,21 @@ export const cellsValuesAreSame = (
 ): boolean => (
   (prevCell as GameCell).value === (currentCell as GameCell).value
 );
+
+export const matrixAreSame = (
+  prevCellsSet: GameCell[],
+  currentCellsSet: GameCell[],
+) : boolean => {
+  const prevCellsSum = prevCellsSet.reduce((
+    acc, cell,
+  ) => acc + generateCheckSumByCoords(cell.x, cell.y), 0);
+
+  const currentCellsSum = currentCellsSet.reduce((
+    acc, cell,
+  ) => acc + generateCheckSumByCoords(cell.x, cell.y), 0);
+
+  return prevCellsSum === currentCellsSum;
+};
 
 export const cellIsInIdleState = (
   cell: MatrixCell,
@@ -113,9 +129,9 @@ export const moveCellsToDirection = (
   const cells: GameCell[] = cloneDeep<GameCell[]>(cellsToMove);
   const matrixWithCells = buildMatrixWithCells(cells);
 
-  const rotatedMatrix = rotateMatrixFromDirection<MatrixCell>(matrixWithCells, direction);
+  const rotatedMatrix = rotateMatrixToDirection<MatrixCell>(matrixWithCells, direction);
   const transformedMatrix = traverseMatrix<MatrixCell>(rotatedMatrix, moveCells);
-  const rotatedBackMatrix = rotateMatrixToDirection<MatrixCell>(transformedMatrix, direction);
+  const rotatedBackMatrix = rotateMatrixFromDirection<MatrixCell>(transformedMatrix, direction);
   const finalMatrix = traverseMatrix<MatrixCell>(rotatedBackMatrix, updateCellsCoords);
 
   return finalMatrix.flat(2).filter((cell: MatrixCell) => cell !== 0);

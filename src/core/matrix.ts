@@ -28,20 +28,6 @@ export const traverseMatrix = <T>(
   return matrix;
 };
 
-export const matrixAreSame = (
-  prevCellsSet: GameCell[],
-  currentCellsSet: GameCell[],
-) : boolean => {
-  const prevCellsSum = prevCellsSet.reduce((
-    acc, cell,
-  ) => acc + generateCheckSumByCoords(cell.x, cell.y), 0);
-
-  const currentCellsSum = currentCellsSet.reduce((
-    acc, cell,
-  ) => acc + generateCheckSumByCoords(cell.x, cell.y), 0);
-
-  return prevCellsSum === currentCellsSum;
-};
 
 export const reverseRows = <T>(matrix: T[][]): T[][] => traverseMatrix<T>(
   matrix,
@@ -66,7 +52,7 @@ export const rotateMatrix = <T>(matrix: T[][]): T[][] => {
   return reverseRows(transposedMatrix);
 };
 
-export const rotateMatrixToDirection = <T>(matrix: T[][], direction: Direction): T[][] => {
+export const rotateMatrixFromDirection = <T>(matrix: T[][], direction: Direction): T[][] => {
   switch (direction) {
     case Direction.LEFT:
       return rotateMatrix(rotateMatrix(rotateMatrix(matrix)));
@@ -79,7 +65,7 @@ export const rotateMatrixToDirection = <T>(matrix: T[][], direction: Direction):
   }
 };
 
-export const rotateMatrixFromDirection = <T>(matrix: T[][], direction: Direction): T[][] => {
+export const rotateMatrixToDirection = <T>(matrix: T[][], direction: Direction): T[][] => {
   switch (direction) {
     case Direction.LEFT:
       return rotateMatrix(matrix);
