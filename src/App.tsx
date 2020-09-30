@@ -1,17 +1,19 @@
 import React, { FC, useState, useEffect } from 'react';
 import { GameCell, Direction } from './types';
+
 import { createInitialCells, populateFieldWithNewCells } from './core/creator';
 import { checkAvailableMoves, isEmptyCellsExist, moveCellsToDirection } from './core/engine';
 import { removeAndIncreaseCells } from './core/updater';
+import { matrixAreSame } from './core/matrix';
+
 import { scoreService } from './services/score';
+import { withDynamicCounter } from './HOC/withDynamicCounter';
 
 import Layout from './components/Layout';
 import Field from './components/Field';
 import ControlPanel from './components/ControlPanel';
 import Scoreboard from './components/Scoreboard';
-import { matrixAreSame } from './core/matrix';
-
-import { withDynamicCounter } from './HOC/withDynamicCounter';
+import SplashScreen from './components/SplashScreen';
 
 const initCells : GameCell[] = createInitialCells();
 
@@ -32,11 +34,13 @@ const App: FC = () => {
   const [cells, setCells] = useState<GameCell[]>(initCells);
   const [totalScores, setTotalScores] = useState<number>(0);
   const [gainedScores, setGainedScores] = useState<number>(0);
+  const [splashIsShown, setSplashIsShown] = useState<boolean>(false);
 
   const runNewGame = (): void => {
     bestScore = scoreService.get();
     setCells(createInitialCells());
     setTotalScores(0);
+    setSplashIsShown(false);
   };
 
   const updateFieldByDirection = (direction: Direction) => {
@@ -50,11 +54,9 @@ const App: FC = () => {
 
       const fieldHasAvailableCells = isEmptyCellsExist(resultCells);
 
-
       if (!fieldHasAvailableCells) {
         const hasAvailableMove = checkAvailableMoves(resultCells);
-        console.log(hasAvailableMove);
-        // TODO: show screen for the looser
+        if (!hasAvailableMove) setSplashIsShown(true);
       }
     }
 
@@ -87,7 +89,12 @@ const App: FC = () => {
         <ScoresWithDynamicCounter gainedScores={gainedScores} score={totalScores} title="score" />
         <Scoreboard score={bestScore} title="Best" />
       </ControlPanel>
-      <Field cells={cells} />
+      <Field cells={cells}>
+        {
+          splashIsShown
+          && <SplashScreen title="Game Over" onRetry={runNewGame} />
+        }
+      </Field>
     </Layout>
   );
 };

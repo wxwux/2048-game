@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Container, Title } from './styles';
 import Button from '../Button';
 
-const SplashScreen = () => (
+type PropTypes = {
+  title: string,
+  onRetry: () => void;
+};
+
+const SplashScreen: FC<PropTypes> = ({ title, onRetry }: PropTypes) => (
   <Container>
-    <Title>
-      Game Over
-    </Title>
-    <Button>Try Again</Button>
+    <Title>{title}</Title>
+    <Button onClick={onRetry}>Try Again</Button>
   </Container>
 );
 

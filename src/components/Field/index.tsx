@@ -1,21 +1,21 @@
 import React, { FC } from 'react';
 import { GameCell } from '../../types';
-import SplashScreen from '../SplashScreen';
 
 import {
   Container, Background, BackgroundCell, Playground, Cell, SplashContainer,
 } from './styles';
+import { MATRIX_SIZE } from '../../core/constants';
 
 type PropTypes = {
   cells: GameCell[];
 }
 
-const Field : FC<PropTypes> = ({ cells }: PropTypes) => (
+const Field : FC<PropTypes> = ({ cells, children }) => (
   <Container>
     <Background>
       {
         Array
-          .from(new Array(16), (_, i) => i)
+          .from(new Array(MATRIX_SIZE * MATRIX_SIZE), (_, i) => i)
           .map((i) => <BackgroundCell key={i} />)
       }
     </Background>
@@ -30,7 +30,7 @@ const Field : FC<PropTypes> = ({ cells }: PropTypes) => (
       ))}
     </Playground>
     <SplashContainer>
-      <SplashScreen />
+      {children}
     </SplashContainer>
   </Container>
 );
