@@ -15,7 +15,7 @@ const Field : FC<PropTypes> = ({ cells, children }) => (
     <Background>
       {
         Array
-          .from(new Array(MATRIX_SIZE * MATRIX_SIZE), (_, i) => i)
+          .from(new Array(MATRIX_SIZE ** 2), (_, i) => i)
           .map((i) => <BackgroundCell key={i} />)
       }
     </Background>

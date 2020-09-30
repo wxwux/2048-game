@@ -13,7 +13,7 @@ export const create = (cell: GameCell): GameCell => ({
   state: cell.state,
 });
 
-export const getRandomCoords = () : number => Math.floor(Math.random() * 3.9);
+export const getRandomCoords = () : number => Math.floor(Math.random() * (MATRIX_SIZE - 0.1));
 
 export const createInitialCells = () : GameCell[] => {
   const firstCell: GameCell = create({
@@ -69,7 +69,7 @@ export const populateFieldWithNewCells = (cells: GameCell[]): GameCell[] => {
     occupiedCoords.add(generateCheckSumByCoords(cell.x, cell.y));
   });
 
-  const allCellsAreFilled = occupiedCoords.size === 16;
+  const allCellsAreFilled = occupiedCoords.size === MATRIX_SIZE ** 2;
   if (allCellsAreFilled) return cells;
 
   const [x, y] = getAvailableCoords(occupiedCoords);

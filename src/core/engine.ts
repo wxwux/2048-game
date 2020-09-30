@@ -122,7 +122,7 @@ export const moveCellsToDirection = (
 };
 
 export const isEmptyCellsExist = (occupiedCells: GameCell[]) : boolean => {
-  const availableCells = MATRIX_SIZE * MATRIX_SIZE;
+  const availableCells = MATRIX_SIZE ** 2;
   return occupiedCells.length < availableCells;
 };
 

@@ -3,6 +3,7 @@ import {
   calcFontSize, calculateBackgroundColor,
 } from './helpers';
 import { CellType } from '../../types';
+import { MATRIX_SIZE } from '../../core/constants';
 
 interface CellProps {
   x: number;
@@ -11,9 +12,13 @@ interface CellProps {
   state: CellType;
 }
 
+export const calcPlaygroundSize = (
+  cellSize: number, marginSize: number,
+): number => cellSize * MATRIX_SIZE + marginSize * 2 * MATRIX_SIZE + 10;
+
 export const Container = styled.div`
-  height: 450px;
-  width: 450px;
+  height:  ${calcPlaygroundSize(100, 5)}px;
+  width: ${calcPlaygroundSize(100, 5)}px;
   position: relative;
 `;
 
@@ -32,11 +37,11 @@ export const Background = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  height: 450px;
   justify-content: space-between;
   padding: 5px;
   position: absolute;
-  width: 450px;
+  width: 100%;
+  height: 100%;
 `;
 
 export const Playground = styled(Background)`
