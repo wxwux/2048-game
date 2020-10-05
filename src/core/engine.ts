@@ -46,67 +46,32 @@ export const cellIsInMovingState = (
   cell: MatrixCell,
 ): boolean => (cell as GameCell).state === CellType.MOVING;
 
-export const substituteCellUpInMatrix = (
+export const substituteEmptyCell = (
   originalMatrix: Matrix,
   currentCell: CellCoords,
-  substitutedCell: CellCoords,
+  emptyCell: CellCoords,
 ): Matrix => {
   const matrix = cloneDeep(originalMatrix);
 
-  matrix[substitutedCell.y][substitutedCell.x] = matrix[currentCell.y][currentCell.x];
+  matrix[emptyCell.y][emptyCell.x] = matrix[currentCell.y][currentCell.x];
   (matrix[currentCell.y][currentCell.x] as GameCell).state = CellType.MOVING;
   (matrix[currentCell.y][currentCell.x] as 0) = 0;
 
   return matrix;
 };
 
-export const suppressCellUpInMatrix = (
+export const substituteFilledCell = (
   originalMatrix: Matrix,
   currentCell: CellCoords,
-  suppressedCell: CellCoords,
+  cellToReplace: CellCoords,
 ): Matrix => {
   const matrix = cloneDeep(originalMatrix);
 
-  (matrix[suppressedCell.y][suppressedCell.x] as GameCell).state = CellType.DYING;
+  (matrix[cellToReplace.y][cellToReplace.x] as GameCell).state = CellType.DYING;
   (matrix[currentCell.y][currentCell.x] as GameCell).state = CellType.INCREASE;
 
-  matrix[suppressedCell.y][suppressedCell.x] = matrix[currentCell.y][currentCell.x];
+  matrix[cellToReplace.y][cellToReplace.x] = matrix[currentCell.y][currentCell.x];
   (matrix[currentCell.y][currentCell.x] as number) = 0;
-
-  return matrix;
-};
-
-export const moveCells: MoveCellsFunction = (
-  matrixToTransform, x, y,
-) => {
-  if (matrixToTransform[y][x] === 0) return matrixToTransform;
-
-  let matrix = cloneDeep(matrixToTransform);
-  let currentRowY = y;
-  let prevRowY = y - 1;
-
-  while (prevRowY >= 0) {
-    const currentCell = matrix[currentRowY][x];
-    const cellAbove = matrix[prevRowY][x];
-
-    if (cellIsEmpty(cellAbove)) {
-      matrix = substituteCellUpInMatrix(
-        matrix, { x, y: currentRowY }, { x, y: prevRowY },
-      );
-    }
-
-    if (
-      cellsValuesAreSame(cellAbove, currentCell)
-      && (cellIsInIdleState(cellAbove) || cellIsInMovingState(cellAbove))
-    ) {
-      matrix = suppressCellUpInMatrix(
-        matrix, { x, y: currentRowY }, { x, y: prevRowY },
-      );
-    }
-
-    currentRowY = prevRowY;
-    prevRowY--;
-  }
 
   return matrix;
 };
@@ -123,6 +88,41 @@ export const updateCellsCoords: MoveCellsFunction = (
   return matrix;
 };
 
+export const moveCellsUpInMatrix: MoveCellsFunction = (
+  matrixToTransform, x, y,
+) => {
+  if (matrixToTransform[y][x] === 0) return matrixToTransform;
+
+  let matrix = cloneDeep(matrixToTransform);
+  let currentRowY = y;
+  let prevRowY = y - 1;
+
+  while (prevRowY >= 0) {
+    const currentCell = matrix[currentRowY][x];
+    const cellAbove = matrix[prevRowY][x];
+
+    if (cellIsEmpty(cellAbove)) {
+      matrix = substituteEmptyCell(
+        matrix, { x, y: currentRowY }, { x, y: prevRowY },
+      );
+    }
+
+    if (
+      cellsValuesAreSame(cellAbove, currentCell)
+      && (cellIsInIdleState(cellAbove) || cellIsInMovingState(cellAbove))
+    ) {
+      matrix = substituteFilledCell(
+        matrix, { x, y: currentRowY }, { x, y: prevRowY },
+      );
+    }
+
+    currentRowY = prevRowY;
+    prevRowY--;
+  }
+
+  return matrix;
+};
+
 export const moveCellsToDirection = (
   cellsToMove: GameCell[], direction: Direction,
 ): GameCell[] => {
@@ -130,7 +130,7 @@ export const moveCellsToDirection = (
   const matrixWithCells = buildMatrixWithCells(cells);
 
   const rotatedMatrix = rotateMatrixToDirection<MatrixCell>(matrixWithCells, direction);
-  const transformedMatrix = traverseMatrix<MatrixCell>(rotatedMatrix, moveCells);
+  const transformedMatrix = traverseMatrix<MatrixCell>(rotatedMatrix, moveCellsUpInMatrix);
   const rotatedBackMatrix = rotateMatrixFromDirection<MatrixCell>(transformedMatrix, direction);
   const finalMatrix = traverseMatrix<MatrixCell>(rotatedBackMatrix, updateCellsCoords);
 
@@ -159,7 +159,7 @@ export const getNeighbourCells = (
     aboveCell = matrix[aboveCellY][currentX];
   }
 
-  if (belowCellY < MATRIX_SIZE - 1) {
+  if (belowCellY < MATRIX_SIZE) {
     belowCell = matrix[belowCellY][currentX];
   }
 
@@ -171,7 +171,7 @@ export const getNeighbourCells = (
     nextCell = matrix[currentY][nextCellX];
   }
 
-  return [aboveCell, belowCell, nextCell, prevCell].filter(
+  return [nextCell, belowCell, prevCell, aboveCell].filter(
     (cell) => cell !== 0,
   ) as GameCell[];
 };
