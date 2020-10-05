@@ -68,10 +68,9 @@ it('update cells and returns scoress', () => {
   expect(scores).toBe(12);
 });
 
-// it('calculates scores correctly', () => {
-//   const calculator = scoresGatherer();
-//
-//   expect(calculator).toBe(0);
-//   expect(calculator.add(2)).toBe(2);
-//   expect(calculator.add(4)).toBe(6);
-// });
+it('calculates scores correctly', () => {
+  const calculator = scoresGatherer();
+
+  expect(calculator(2)).toBe(2);
+  expect(calculator(4)).toBe(6);
+});
