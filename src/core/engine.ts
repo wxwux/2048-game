@@ -81,11 +81,10 @@ export const updateCellsCoords: MoveCellsFunction = (
 ) => {
   if (cellsToUpdate[y][x] === 0) return cellsToUpdate;
 
-  const matrix = cloneDeep(cellsToUpdate);
-  (matrix[y][x] as GameCell).y = y;
-  (matrix[y][x] as GameCell).x = x;
+  (cellsToUpdate[y][x] as GameCell).y = y;
+  (cellsToUpdate[y][x] as GameCell).x = x;
 
-  return matrix;
+  return cellsToUpdate;
 };
 
 export const moveCellsUpInMatrix: MoveCellsFunction = (
@@ -93,17 +92,16 @@ export const moveCellsUpInMatrix: MoveCellsFunction = (
 ) => {
   if (matrixToTransform[y][x] === 0) return matrixToTransform;
 
-  let matrix = cloneDeep(matrixToTransform);
   let currentRowY = y;
   let prevRowY = y - 1;
 
   while (prevRowY >= 0) {
-    const currentCell = matrix[currentRowY][x];
-    const cellAbove = matrix[prevRowY][x];
+    const currentCell = matrixToTransform[currentRowY][x];
+    const cellAbove = matrixToTransform[prevRowY][x];
 
     if (cellIsEmpty(cellAbove)) {
-      matrix = substituteEmptyCell(
-        matrix, { x, y: currentRowY }, { x, y: prevRowY },
+      matrixToTransform = substituteEmptyCell(
+        matrixToTransform, { x, y: currentRowY }, { x, y: prevRowY },
       );
     }
 
@@ -111,8 +109,8 @@ export const moveCellsUpInMatrix: MoveCellsFunction = (
       cellsValuesAreSame(cellAbove, currentCell)
       && (cellIsInIdleState(cellAbove) || cellIsInMovingState(cellAbove))
     ) {
-      matrix = substituteFilledCell(
-        matrix, { x, y: currentRowY }, { x, y: prevRowY },
+      matrixToTransform = substituteFilledCell(
+        matrixToTransform, { x, y: currentRowY }, { x, y: prevRowY },
       );
     }
 
@@ -120,7 +118,7 @@ export const moveCellsUpInMatrix: MoveCellsFunction = (
     prevRowY--;
   }
 
-  return matrix;
+  return matrixToTransform;
 };
 
 export const moveCellsToDirection = (
